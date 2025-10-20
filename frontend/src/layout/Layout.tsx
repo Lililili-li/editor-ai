@@ -1,0 +1,23 @@
+import Sidebar from "@/layout/Sidebar";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
+import Content from "./Content";
+
+export default function Home() {
+  return (
+    <section className="home-container w-dvw h-dvh">
+      <ResizablePanelGroup direction="horizontal">
+        <ResizablePanel defaultSize={18} minSize={15} maxSize={30}>
+          <Sidebar />
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={82} minSize={70} maxSize={85}>
+          <Content></Content>
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </section>
+  );
+}
