@@ -1,13 +1,13 @@
-const { mysqlTable, serial, text, timestamp, boolean, int, json } = require('drizzle-orm/mysql-core');
+const { mysqlTable, serial, text, timestamp, boolean, int, json, varchar, tinyint } = require('drizzle-orm/mysql-core');
 
 // 用户表
 const users = mysqlTable('users', {
   id: serial('id').primaryKey(),
-  username: text('username').notNull().unique(),
-  email: text('email').notNull().unique(),
-  password: text('password').notNull(),
-  avatar: text('avatar'),
+  username: varchar({length: 20}).notNull().unique(),
+  avatar: text('avatar').default(null),
   isActive: boolean('is_active').default(true),
+  salt: varchar({length: 255}).notNull(),
+  hash: varchar({length: 255}).notNull(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -18,58 +18,44 @@ const articles = mysqlTable('articles', {
   title: text('title').notNull(),
   content: text('content'),
   contentJson: json('content_json'), // 存储富文本编辑器的JSON格式内容
-  authorId: int('author_id').references(() => users.id),
+  likeCount: int('like_count'),
+  viewCount: int('view_count'),
+  collectionCount: int('collection_count'),
+  authorId: int('author_id'),
   isPublished: boolean('is_published').default(false),
   publishedAt: timestamp('published_at'),
+  icon: text('icon'),
+  deleted: tinyint('deleted').default(0),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
-// 标签表
-const tags = mysqlTable('tags', {
+const usersArticlesRoles = mysqlTable('users_articles_roles', {
   id: serial('id').primaryKey(),
-  name: text('name').notNull().unique(),
-  color: text('color'),
-  createdAt: timestamp('created_at').defaultNow(),
-});
-
-// 文章标签关联表
-const articleTags = mysqlTable('article_tags', {
+  userId: int('user_id'),
+  articleId: int('article_id'),
+})
+const usersArticlesLikes = mysqlTable('users_articles_likes', {
   id: serial('id').primaryKey(),
-  articleId: int('article_id').references(() => articles.id),
-  tagId: int('tag_id').references(() => tags.id),
-  createdAt: timestamp('created_at').defaultNow(),
-});
-
-// 评论表
-const comments = mysqlTable('comments', {
+  userId: int('user_id'),
+  articleId: int('article_id'),
+})
+const usersArticlesViews = mysqlTable('users_articles_views', {
   id: serial('id').primaryKey(),
-  content: text('content').notNull(),
-  articleId: int('article_id').references(() => articles.id),
-  authorId: int('author_id').references(() => users.id),
-  parentId: int('parent_id').references(() => comments.id), // 支持嵌套评论
-  isApproved: boolean('is_approved').default(false),
-  createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at').defaultNow(),
-});
-
-// 文件上传表
-const uploads = mysqlTable('uploads', {
+  userId: int('user_id'),
+  articleId: int('article_id'),
+})
+const usersArticlesCollections = mysqlTable('users_articles_collections', {
   id: serial('id').primaryKey(),
-  filename: text('filename').notNull(),
-  originalName: text('original_name').notNull(),
-  mimeType: text('mime_type').notNull(),
-  size: int('size').notNull(),
-  path: text('path').notNull(),
-  uploadedBy: int('uploaded_by').references(() => users.id),
-  createdAt: timestamp('created_at').defaultNow(),
-});
+  userId: int('user_id'),
+  articleId: int('article_id'),
+})
 
 module.exports = {
   users,
   articles,
-  tags,
-  articleTags,
-  comments,
-  uploads,
+  usersArticlesRoles,
+  usersArticlesLikes,
+  usersArticlesViews,
+  usersArticlesCollections
 };

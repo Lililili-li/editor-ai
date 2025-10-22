@@ -1,7 +1,6 @@
-import { ReactRenderer } from '@tiptap/react'
-
-import Suggestion from '@/plugins/editor/suggestions/Suggestion'
-import tippy from 'tippy.js'
+import { Editor, ReactRenderer, posToDOMRect } from '@tiptap/react'
+import { computePosition, flip, shift } from '@floating-ui/dom'
+import Suggestion from './Suggestion'
 
 const suggestionsList = [
   {
@@ -91,6 +90,25 @@ const suggestionsList = [
   }
 ]
 
+const updatePosition = (editor: Editor, element: any) => {
+  const virtualElement = {
+    getBoundingClientRect: () => posToDOMRect(editor.view, editor.state.selection.from, editor.state.selection.to),
+  }
+
+  computePosition(virtualElement, element, {
+    placement: 'right',
+    strategy: 'absolute',
+    middleware: [shift(), flip()],
+  }).then(({ x, y, strategy }) => {
+    element.style.border= '1px solid #eee'
+    element.style.borderRadius= '4px'
+    element.style.width = 'max-content'
+    element.style.position = strategy
+    element.style.left = `${x + 5}px`
+    element.style.top = `${y}px`
+  })
+}
+
 export default {
   char: '/',
   items: ({ query } : {query: string}) => {
@@ -99,39 +117,43 @@ export default {
   },
 
   render: () => {
-    let component: any, tippyInstance: any
+    let component: any
 
     return {
       onStart: (props: any) => {
-        const { decorationNode } = props
         component = new ReactRenderer(Suggestion, {
           props,
           editor: props.editor,
         })
-        tippyInstance = tippy(decorationNode, {
-          content: component.element,
-          placement: 'right',
-          animation: 'fade',
-          allowHTML: true,
-        })
-        tippyInstance.show()
         if (!props.clientRect) {
           return
         }
+        component.element.style.position = 'absolute'
+        document.body.appendChild(component.element)
+        updatePosition(props.editor, component.element)
       },
 
       onUpdate(props:any) {
         component.updateProps(props)
-
         if (!props.clientRect) {
           return
         }
-        tippyInstance.show()
+        updatePosition(props.editor, component.element)
+      },
+
+      onKeyDown(props: any) {
+        if (props.event.key === 'Escape') {
+          component.destroy()
+
+          return true
+        }
+
+        return component.ref?.onKeyDown(props)
       },
 
       onExit() {
-        component.element.remove()
-        component.destroy()
+        component?.element.remove()
+        component?.destroy()
       },
     }
   },

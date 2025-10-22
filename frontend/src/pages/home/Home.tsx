@@ -3,6 +3,8 @@ import AiICon from "./images/Ai.svg";
 import templateIcon from "./images/template.svg";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DataTable from "./components/DataTable";
+import CreateArticleDialog from "../work/components/CreateArticle/CreateArticleDialog";
+import { useRef } from "react";
 const documents = [
   {
     type: "业务经营周报",
@@ -12,40 +14,45 @@ const documents = [
   },
 ];
 const Home = () => {
+  const createArticleDialogRef = useRef<{ openDialog: () => void }>(null);
+
   return (
     <section className="home-container h-dvh p-5">
       <div className="font-bold text-[18px]">主页</div>
       <div className="flex gap-2 mt-4">
         <button
           className="py-3 px-4 flex items-center w-[340px] hover:bg-gray-100 rounded-[8px] gap-2 cursor-pointer border-[1px] border-[rgb(222, 224, 227)
-] border-solid transition-all duration-300 ease-in-out flex-wrap"
+] border-solid transition-all duration-300 ease-in-out flex-wrap dark:border-gray-500 dark:hover:bg-white/10"
+          onClick={() => createArticleDialogRef.current?.openDialog()}
         >
           <img src={documentIcon} alt="" style={{ width: "24px" }} />
           <div className="flex flex-col">
             <div className="font-bold text-[14px] text-left">新建文档</div>
-            <div className="text-gray-500 text-[13px]">新建文档开始写作</div>
+            <div className="text-gray-500 text-[13px] dark:text-gray-300">
+              新建文档开始写作
+            </div>
           </div>
         </button>
         <button
           className="py-3 px-4 flex items-center w-[340px] hover:bg-gray-100 rounded-[8px] gap-2 cursor-pointer border-[1px] border-[rgb(222, 224, 227)
-] border-solid transition-all duration-300 ease-in-out flex-wrap"
+] border-solid transition-all duration-300 ease-in-out flex-wrap dark:border-gray-500 dark:hover:bg-white/10"
         >
           <img src={templateIcon} alt="" style={{ width: "24px" }} />
           <div className="flex flex-col">
             <div className="font-bold text-[14px] text-left">模板中心</div>
-            <div className="text-gray-500 text-[13px]">
+            <div className="text-gray-500 text-[13px] dark:text-gray-300">
               选择模板快速搭建文档
             </div>
           </div>
         </button>
         <button
           className="py-3 px-4 flex items-center w-[340px] hover:bg-gray-100 rounded-[8px] gap-2 cursor-pointer border-[1px] border-[rgb(222, 224, 227)
-] border-solid transition-all duration-300 ease-in-out flex-wrap"
+] border-solid transition-all duration-300 ease-in-out flex-wrap dark:border-gray-500 dark:hover:bg-white/10"
         >
           <img src={AiICon} alt="" style={{ width: "24px" }} />
           <div className="flex flex-col">
             <div className="font-bold text-[14px] text-left">AI助手</div>
-            <div className="text-gray-500 text-[13px]">
+            <div className="text-gray-500 text-[13px] dark:text-gray-300">
               AI助手帮你一键生成文档
             </div>
           </div>
@@ -70,6 +77,7 @@ const Home = () => {
           </TabsContent>
         </Tabs>
       </div>
+      <CreateArticleDialog ref={createArticleDialogRef} />
     </section>
   );
 };

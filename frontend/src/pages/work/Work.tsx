@@ -1,7 +1,7 @@
 import ArticleContainer from "./ArticleContainer";
 import ArticleHeader from "./ArticleHeader";
 import ArticleFooter from "./ArticleFooter";
-const Worker = () => {
+const Work = () => {
   return (
     <div className="h-full w-full flex flex-col">
       <div className="border-b-1 border-gray-200 h-[45px] dark:border-gray-700 px-2">
@@ -15,4 +15,4 @@ const Worker = () => {
   );
 };
 
-export default Worker;
+export default Work;

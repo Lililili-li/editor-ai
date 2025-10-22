@@ -1,4 +1,3 @@
-import { ModeToggle } from "@/components/mode-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Toggle } from "@/components/ui/toggle";
 import { Bot, HeartPlus, Share, SquareArrowOutUpRight } from "lucide-react";
@@ -68,7 +67,6 @@ const EditorHeader = () => {
             发布
           </Toggle>
         </div>
-        <ModeToggle />
       </div>
     </div>
   );

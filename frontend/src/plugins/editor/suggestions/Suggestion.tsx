@@ -24,7 +24,7 @@ import {
   Quote,
 } from "lucide-react";
 import { Button } from "../../../components/ui/button";
-import { useEffect, useRef } from "react";
+import { useEffect, useImperativeHandle, useRef, useState, type ReactEventHandler } from "react";
 
 const formatIconMap = {
   h1: <Heading1 style={{ width: "16px" }} />,
@@ -50,8 +50,9 @@ interface MenuItemProps {
   [key: string]: any;
 }
 
-const Suggestion = (props: { editor: Editor; items: MenuItemProps[] }) => {
+const Suggestion = (props: { editor: Editor; items: MenuItemProps[], [key: string]: any }) => {
   const { items: list, editor } = props;
+  const [value, setValue] = useState('h1')
   const onMenuClick = (item: MenuItemProps) => {
     switch (item.value) {
       case "h1":
@@ -77,21 +78,63 @@ const Suggestion = (props: { editor: Editor; items: MenuItemProps[] }) => {
     }
   };
 
-  const CommandRef = useRef(null)
+  const [selectedIndex, setSelectedIndex] = useState(0)
 
+  const selectItem = (index: number) => {
+    const item = props.items[index]
+
+    if (item) {
+      onMenuClick(item)
+    }
+  }
+
+  const upHandler = () => {
+    setSelectedIndex((selectedIndex + props.items.length - 1) % props.items.length)
+  }
+
+  const downHandler = () => {
+    setSelectedIndex((selectedIndex + 1) % props.items.length)
+  }
+
+  const enterHandler = () => {
+    selectItem(selectedIndex)
+  }
+
+  useImperativeHandle(props.ref, () => ({
+    onKeyDown: ({ event }: { event: KeyboardEvent }) => {
+      if (event.key === 'ArrowUp') {
+        upHandler()
+        return true
+      }
+
+      if (event.key === 'ArrowDown') {
+        downHandler()
+        return true
+      }
+
+      if (event.key === 'Enter') {
+        enterHandler()
+        return true
+      }
+
+      return false
+    },
+  }))
   useEffect(() => {
-    // CommandRef.current?.focus()
-  },[])
+    const currentDom = document.querySelector('#command-item-'+props.items[selectedIndex]?.value)
+    currentDom?.scrollIntoView({ block:'center' })
+    setValue(props.items[selectedIndex]?.value)
+  }, [selectedIndex])
 
   return (
-    <ScrollArea className="border max-h-[300px] w-[150px] rounded-lg">
-      <Command className="shadow-md "ref={CommandRef}>
+    <ScrollArea className="max-h-[300px] w-[250px] rounded-[4px]">
+      <Command value={value} onValueChange={(value) => setValue(value)}>
         <CommandList>
           <CommandGroup heading="格式">
             {list
               .filter((item) => item.type === "format")
               .map((item) => (
-                <CommandItem key={item.value} className="cursor-pointer">
+                <CommandItem key={item.value} className="cursor-pointer" value={item.value} >
                   <Button
                     variant="ghost"
                     className=" p-0 h-5 gap-[6px] text-[13px]"
@@ -100,6 +143,7 @@ const Suggestion = (props: { editor: Editor; items: MenuItemProps[] }) => {
                       event.stopPropagation();
                       onMenuClick(item);
                     }}
+                    id={'command-item-'+ item.value}
                   >
                     <span className="text-[13px]">
                       {formatIconMap[
@@ -116,10 +160,11 @@ const Suggestion = (props: { editor: Editor; items: MenuItemProps[] }) => {
             {list
               .filter((item) => item.type === "other")
               .map((item) => (
-                <CommandItem key={item.value} className="cursor-pointer">
+                <CommandItem key={item.value} className="cursor-pointer" value={item.value} >
                   <Button
                     variant="ghost"
                     className="p-0 h-5 gap-[6px] text-[13px]"
+                    id={'command-item-'+ item.value}
                   >
                     <span className="text-[13px]">
                       {formatIconMap[

@@ -3,8 +3,6 @@ const mysql = require('mysql2/promise');
 const schema = require('../schema/index.js');
 
 // 数据库连接配置
-console.log(process.env.DB_HOST, '----');
-
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
   port: process.env.DB_PORT || 3306,

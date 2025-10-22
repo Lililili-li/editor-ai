@@ -1,6 +1,6 @@
 import { Button } from "./button";
 import { ChevronDown } from "lucide-react";
-import {useEffect, useState} from "react";
+import { memo, useEffect, useState } from "react";
 import { cloneDeep } from "lodash-es";
 
 interface TreeDataProps {
@@ -17,23 +17,27 @@ interface TreeProps {
   actionSlot: (data: TreeDataProps) => React.ReactNode;
 }
 
-const Tree: React.FC<TreeProps> = ({
+const Tree: React.FC<TreeProps> = memo(({
   onNodeClick,
   value,
   treeData,
   expandAll = true,
   actionSlot,
 }) => {
-  
   const [showData, setShowData] = useState<TreeDataProps[]>([]);
 
   useEffect(() => {
     const copyData = cloneDeep(treeData);
-    if (expandAll) {
-      copyData.forEach((item) => {
+    copyData.forEach((item) => {
+      if (expandAll) {
         item.visible = true;
-      });
-    }
+      } else {
+        if (!item.parentId && item.children?.length) {
+          item.childrenVisible = false
+        }
+      }
+    });
+
     setShowData(copyData);
   }, [value, treeData]);
 
@@ -77,7 +81,9 @@ const Tree: React.FC<TreeProps> = ({
           item.visible && (
             <div
               className={`tree-item-parent cursor-pointer ${
-                value === item.id ? "bg-black/5 dark:hover:bg-white/10 dark:bg-white/10" : ""
+                value === item.id
+                  ? "bg-black/5 dark:hover:bg-white/10 dark:bg-white/10"
+                  : ""
               } hover:bg-black/5 dark:hover:bg-white/5 rounded-sm`}
               style={{ paddingLeft: `${item.level * 16}px` }}
               key={item.id}
@@ -120,7 +126,10 @@ const Tree: React.FC<TreeProps> = ({
                     }}
                   >
                     <div className="flex items-center gap-1">
-                      <span className="flex items-center">{item.emoji}</span> {item.title? item.title: '<无标题>'}
+                      <span className="flex items-center">{item.emoji}</span>{" "}
+                      <span className=" overflow-ellipsis overflow-hidden whitespace-nowrap">
+                        {item.title ? item.title : "<无标题>"}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -131,5 +140,5 @@ const Tree: React.FC<TreeProps> = ({
       )}
     </>
   );
-}
+})
 export default Tree;

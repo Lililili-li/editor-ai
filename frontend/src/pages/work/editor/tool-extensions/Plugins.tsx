@@ -11,12 +11,18 @@ import {
   IconTable,
   IconHighlight,
   IconCodeHighlight,
+  IconChart,
+  IconDivider,
 } from "@douyinfe/semi-icons-lab";
 import Table from "./Table";
 import type { FC, ReactNode } from "react";
 import type { ToolBarCompProps } from ".";
 
 const PluginsList: FC<ToolBarCompProps> = ({ editorState, editor }) => {
+  const onInsertImage = () => {
+    editor.chain().focus().insertUploadImage().run();
+  };
+
   return (
     <div className="p-2 w-[200px]">
       <div className="label mb-1 text-gray-500 dark:text-gray-100 text-[13px]">
@@ -26,11 +32,32 @@ const PluginsList: FC<ToolBarCompProps> = ({ editorState, editor }) => {
         <Button
           className="w-full justify-start py-1 px-1 h-6 items-center rounded-[4px]"
           variant="ghost"
+          onClick={onInsertImage}
         >
           <div className="icon mr-1.5 flex items-center">
             <IconImage />
           </div>
           <div className="name">图片</div>
+        </Button>
+
+        <Button
+          className="w-full justify-start py-1 px-1 h-6 rounded-[4px]"
+          variant="ghost"
+        >
+          <div className="icon mr-1.5 flex items-center">
+            <SquareSigma />
+          </div>
+          <div className="name">公式</div>
+        </Button>
+        <Button
+          className="w-full justify-start py-1 px-1 h-6 items-center rounded-[4px]"
+          variant="ghost"
+          onClick={() => editor.chain().focus().setHorizontalRule().run()}
+        >
+          <div className="icon mr-1.5 flex items-center">
+            <IconDivider />
+          </div>
+          <div className="name">分割线</div>
         </Button>
         <Popover
           content={
@@ -47,20 +74,25 @@ const PluginsList: FC<ToolBarCompProps> = ({ editorState, editor }) => {
                 <TableIcon />
               </div>
               <div className="name">表格</div>
-              <div className="more absolute right-[0px] top-1/2 -translate-y-1/2">
+              <div className="more absolute right-0 top-1/2 -translate-y-1/2">
                 <ChevronRight />
               </div>
             </Button>
           </div>
         </Popover>
+      </div>
+      <div className="label mb-1 text-gray-500 dark:text-gray-100 text-[13px] mt-1">
+        程序员
+      </div>
+      <div className="flex gap-1 flex-col">
         <Button
           className="w-full justify-start py-1 px-1 h-6 rounded-[4px]"
           variant="ghost"
         >
           <div className="icon mr-1.5 flex items-center">
-            <SquareSigma />
+            <IconChart />
           </div>
-          <div className="name">公式</div>
+          <div className="name">图表</div>
         </Button>
         <Button
           className="w-full justify-start py-1 px-1 h-6 rounded-[4px]"
@@ -100,7 +132,7 @@ const PluginsList: FC<ToolBarCompProps> = ({ editorState, editor }) => {
                 <IconTable />
               </div>
               <div className="name">电子表格</div>
-              <div className="more absolute right-[0px] top-1/2 -translate-y-1/2">
+              <div className="more absolute right-0 top-1/2 -translate-y-1/2">
                 <ChevronRight />
               </div>
             </Button>
@@ -117,7 +149,7 @@ const Plugins: FC<ToolBarCompProps> = (props) => {
       <Popover content={PluginsList(props) as ReactNode} position="bottomLeft">
         <Button variant="ghost" className="p-0 h-6 w-6">
           <CirclePlus
-            style={{ width: "16px", height: "16px", color: "#62b86e" }}
+            style={{ width: "16px", height: "16px", color: "var(--primary)" }}
           />
         </Button>
       </Popover>

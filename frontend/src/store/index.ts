@@ -1,11 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
 import articleReducer from './features/articleSlice.ts'
 import editorReducer from './features/editorSlice.ts'
+import userReducer from './features/userSlice.ts'
+import appReducer from './features/appSlice.ts'
 
 export const store = configureStore({
   reducer: {
     article: articleReducer,
     editor: editorReducer,
+    user: userReducer,
+    app: appReducer
   },
 })
 

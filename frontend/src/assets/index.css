@@ -74,7 +74,9 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --spacing: 0.3rem
+  --spacing: 0.3rem;
+  --R500: #e22e28;
+  --R100: #fee3e2;
 }
 
 .dark {
@@ -109,7 +111,8 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-
+  --R500: #f05b56;
+  --R100: #591f1d;
 }
 
 
@@ -125,4 +128,8 @@
 
 button {
   cursor: pointer;
+}
+
+.semi-modal-content {
+  padding: 0 !important;
 }

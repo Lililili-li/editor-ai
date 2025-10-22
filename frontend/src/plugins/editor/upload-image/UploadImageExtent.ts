@@ -1,6 +1,7 @@
-import { mergeAttributes, Node } from '@tiptap/core'
+import { mergeAttributes, Node, nodeInputRule } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import UploadImage from '@/plugins/editor/upload-image/UploadImage'
+import Image from '@tiptap/extension-image'
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -10,9 +11,17 @@ declare module '@tiptap/core' {
   }
 }
 
+export const inputRegex = /(?:^|\s)(!\[(.+|:?)]\((\S+)(?:(?:\s+)["'](\S+)["'])?\))$/
 
-export default Node.create({
+const UploadImageExtents =  Image.extend({
   name: 'uploadImage',
+
+  addOptions() {
+    return {
+      allowBase64: false,
+      HTMLAttributes: {},
+    }
+  },
 
   group: 'block',
 
@@ -70,9 +79,8 @@ export default Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['upload-image', mergeAttributes(HTMLAttributes)]
+    return ['upload-image', mergeAttributes(HTMLAttributes, this.options.HTMLAttributes)]
   },
-
   addCommands() {
     return {
       insertUploadImage: () => ({ state, dispatch, commands }) => {
@@ -89,4 +97,20 @@ export default Node.create({
   addNodeView() {
     return ReactNodeViewRenderer(UploadImage)
   },
+
+  addInputRules() {
+    return [
+      nodeInputRule({
+        find: inputRegex,
+        type: this.type,
+        getAttributes: match => {
+          const [, , alt, src, title] = match
+
+          return { src, alt, title }
+        },
+      }),
+    ]
+  },
 })
+
+export default UploadImageExtents

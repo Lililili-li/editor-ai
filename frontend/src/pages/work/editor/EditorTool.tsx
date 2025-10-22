@@ -11,12 +11,9 @@ import {
   ParagraphList,
   TextLink,
   TextQuote,
-  TextSeparate,
   Undo,
   Redo,
   UnsetMarks,
-  // Table,
-  Image,
   Plugins,
 } from "./tool-bar";
 
@@ -262,20 +259,7 @@ const EditorTool = ({ editor }: { editor: Editor }) => {
         return <TextQuote editorState={editorState} editor={editor} />;
       },
     },
-    {
-      id: "HR",
-      name: "HR分割线",
-      rendered: (editorState: EditorState, editor: Editor): ReactNode => {
-        return <TextSeparate editorState={editorState} editor={editor} />;
-      },
-    },
-    {
-      id: "image",
-      name: "图片",
-      rendered: (editorState: EditorState, editor: Editor): ReactNode => {
-        return <Image editorState={editorState} editor={editor} />;
-      },
-    },
+    
   ];
   return (
     <div className="flex items-center gap-1 h-full px-2 py-1">

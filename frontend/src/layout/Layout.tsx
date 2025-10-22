@@ -7,6 +7,7 @@ import {
 import Content from "./Content";
 
 export default function Home() {
+
   return (
     <section className="home-container w-dvw h-dvh">
       <ResizablePanelGroup direction="horizontal">

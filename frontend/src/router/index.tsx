@@ -73,17 +73,22 @@ export const routeConfig = [
       },
     ],
   },
-  // {
-  //   path: "/worker/:id?",
-  //   // Component: Worker,
-  //   lazy: async () => {
-  //     const comp = await import("@/pages/Home");
-  //     return {
-  //       Component: comp.default,
-  //     };
-  //   },
-  //   HydrateFallback: LoadingSpinner,
-  // },
+  {
+    path: "/work/:id?",
+    Component: Layout,
+    children: [
+      {
+        index: true,
+        lazy: async () => {
+          const comp = await import("@/pages/work/Work");
+          return {
+            Component: comp.default,
+          };
+        },
+        HydrateFallback: LoadingSpinner,
+      }
+    ]
+  },
   
   {
     path: "/demo",
