@@ -3,8 +3,6 @@ var router = express.Router();
 const userService = require('../service/User.js');
 const { result } = require('../utils/results.js');
 
-
-
 // 获取用户列表
 router.get('/', async function(req, res) {
   try {

@@ -18,7 +18,7 @@ const ChatBubble: FC<BubbleMenuProps> = ({ editor }) => {
       editor={editor}
       options={{ placement: "top", offset: 8, flip: true }}
     >
-      <div className="bg-white border-[1px] border-[#eee] p-1 rounded-md flex items-center">
+      <div className="bg-white border border-[#eee] p-1 rounded-md flex items-center">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button

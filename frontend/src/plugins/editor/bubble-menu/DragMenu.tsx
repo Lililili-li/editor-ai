@@ -1,15 +1,8 @@
 import type { BubbleMenuProps } from "@tiptap/react/menus";
-import { useCallback, useRef, useState, type FC } from "react";
+import { useRef, type FC } from "react";
 import DragHandle from "@tiptap/extension-drag-handle-react";
 import { Copy, GripVertical, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuItem,
-//   DropdownMenuSeparator,
-//   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu";
 import { Dropdown } from "@douyinfe/semi-ui";
 import type { Editor } from "@tiptap/core";
 import { Node } from "@tiptap/pm/model";
@@ -24,13 +17,26 @@ const DragMenu: FC<BubbleMenuProps> = ({ editor }) => {
   const currentNodePos = useRef(-1);
 
   const handleNodeChange = (data: NodeChangeProps) => {
-    // if (data.node) {
-    //   setCurrentNode(data.node);
-    // }
-    currentNode.current = data.node;
+    if (data.node) {
+      currentNode.current = data.node;
+    }
     currentNodePos.current = data.pos;
-    // setCurrentNodePos(data.pos);
   };
+
+  const handleNodeRemove = () => {
+    editor
+      ?.chain()
+      .setMeta('hideDragHandle', true)
+      .setNodeSelection(currentNodePos.current)
+      .deleteSelection()
+      .run();
+  }
+
+  const handleNodeCopy = () => {
+    const json = currentNode.current?.toJSON()
+    console.log(currentNode.current);
+  }
+
   const onInsertParagraph = () => {
     if (currentNodePos.current === -1) return;
     const currentNodeSize = currentNode.current?.nodeSize || 0;
@@ -91,12 +97,13 @@ const DragMenu: FC<BubbleMenuProps> = ({ editor }) => {
             position="bottomLeft"
             render={
               <Dropdown.Menu>
-                <Dropdown.Item icon={<Copy style={{ width: "15px" }} />}>
+                <Dropdown.Item icon={<Copy style={{ width: "15px" }} />} onClick={() => handleNodeCopy()}>
                   复制
                 </Dropdown.Item>
                 <Dropdown.Item
                   type="danger"
                   icon={<Trash2 style={{ width: "15px" }} />}
+                  onClick={() => handleNodeRemove()}
                 >
                   删除
                 </Dropdown.Item>

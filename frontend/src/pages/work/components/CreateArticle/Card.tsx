@@ -1,6 +1,7 @@
-import { memo, type FC } from "react";
+import { memo, useContext, type FC } from "react";
 import documentIcon from "@/pages/home/images/document.svg";
 import { Plus } from "lucide-react";
+import { CreateArticleContext } from "./CreateArticleDialog";
 
 interface CardProps {
   type: "document" | "table";
@@ -10,9 +11,11 @@ interface CardProps {
 
 const Card: FC<Partial<CardProps> & { isCreate: boolean }> = memo(
   ({ type, title, thumbnail, isCreate }) => {
+    const { createArticle } = useContext(CreateArticleContext)
+
     return (
       <div
-        className=" relative z-[1px] rounded-[6px] translate-z-[1px] bg-[white] p-4 py-3 dark:bg-[#434343] cursor-pointer mr-[24px] mb-[24px] transition-all duration-300 hover:-translate-y-2"
+        className=" relative z-[1px] rounded-[6px] translate-z-px bg-[white] p-4 py-3 dark:bg-[#434343] cursor-pointer mr-[24px] mb-[24px] transition-all duration-300 hover:-translate-y-2"
         style={{
           width: '22.5%',
           boxShadow:
@@ -40,10 +43,10 @@ const Card: FC<Partial<CardProps> & { isCreate: boolean }> = memo(
           </>
         ) : (
           <>
-            <div className="flex flex-col items-center justify-center h-full">
+            <button className="flex flex-col items-center justify-center h-full w-full" onClick={createArticle}>
               <Plus size={48} color="rgb(76, 136, 255)"></Plus>
               <span>新建文档</span>
-            </div>
+            </button>
           </>
         )}
       </div>

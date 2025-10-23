@@ -64,7 +64,7 @@ const TableBubbleMenu: FC<BubbleMenuProps> = ({ editor }) => {
         return null;
       }}
     >
-      <div className="command flex gap-1 p-1 py-1.5 rounded border h-40px items-center bg-[#fff] dark:bg-[#333]">
+      <div className="command flex gap-1 p-1 py-1.5 rounded border h-40px items-center bg-white dark:bg-[#333]">
         <Button
           variant="ghost"
           className="p-0 h-5 px-2"

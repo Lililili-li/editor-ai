@@ -189,7 +189,7 @@ const ImageResize: FC<ImageResizeProps> = ({
           className="rounded-sm cursor-pointer"
           id={id}
         />
-        {editor.isActive("uploadImage") && (
+        {editor.isActive("image") && (
           <div
             className={`mask absolute border-blue-400 border-[1px] top-0 z-0`}
             style={{

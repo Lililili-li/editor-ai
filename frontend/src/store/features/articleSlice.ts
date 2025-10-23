@@ -10,7 +10,7 @@ export interface Article {
   collection: number,
   updatedAt: string,
   createdAt: string,
-  emoji: string,
+  icon: string,
   children?: Article[],
   [key: string]: any
 }
@@ -26,7 +26,7 @@ const initialState = {
     collection: 0,
     updatedAt: '',
     createdAt: '',
-    emoji: '📝',
+    icon: '📝',
     children: []
   } as Article,
   wordsCount: 0,
@@ -40,6 +40,7 @@ const articleSlice = createSlice({
     },
     setActiveArticle(state, action) {
       state.activeArticle = action.payload
+      document.title = action.payload.title || '<无标题>'
     },
     updateActiveArticle(state, action) {
       state.articles.find(article => article.id === action.payload.id)!.title = action.payload.title

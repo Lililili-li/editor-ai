@@ -20,25 +20,26 @@ import {
   Plus,
   Trash2,
 } from "lucide-react";
-import { Skeleton } from "@douyinfe/semi-ui";
 import { treeDataToFlatData } from "@/utils";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveArticle, setArticles } from "@/store/features/articleSlice";
 import type { RootState } from "@/store";
 import { cloneDeep } from "lodash-es";
+import { useRequest } from "ahooks";
+import articleService from "@/api/article-service";
 
 const Action = (
   data: any,
   createArticle: (parentId: string | null) => void
 ) => {
   return (
-    <div className="action flex items-center gap-1.5 group">
+    <div className="flex items-center gap-1.5">
       <Popover>
         <PopoverTrigger asChild>
           <Button
             variant="ghost"
-            className="p-0 h-5 w-5 hover:bg-black/4 rounded-4xl opacity-0 group-hover:opacity-100"
+            className="p-0 h-5 w-5 hover:bg-black/4 rounded-4xl"
             onClick={(e) => {
               e.stopPropagation();
             }}
@@ -74,7 +75,7 @@ const Action = (
       </Popover>
       <Button
         variant="ghost"
-        className="p-0 h-5 w-5 rounded-4xl hover:bg-black/4 opacity-0 group-hover:opacity-100"
+        className="p-0 h-5 w-5 rounded-4xl hover:bg-black/4"
         onClick={(e) => {
           e.stopPropagation();
           createArticle(data.id);
@@ -88,31 +89,21 @@ const Action = (
 
 const Articles = () => {
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
 
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [loading, setLoading] = useState(false);
   const { articles, activeArticle } = useSelector(
     (state: RootState) => state.article
   );
   const dispatch = useDispatch();
-  const getArticle = async () => {
-    setLoading(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const res = await fetch("/api/articles");
-      const articleData = await res.json();
-      if (articleData.code === 200) {
-        const articles = treeDataToFlatData(articleData.data.articles);
-        dispatch(setArticles(articles));
-        
-      }
-    } catch (error) {
-      console.error("获取文章列表失败", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+
+  const { run } = useRequest(() => articleService.getArticles(), {
+    manual: true,
+    onSuccess: (res) => {
+      const articles = treeDataToFlatData(res);
+      dispatch(setArticles(articles));
+    },
+  });
 
   const createArticle = async (parentId: string | null = null) => {
     const requestBody = {
@@ -124,7 +115,7 @@ const Articles = () => {
       collection: 0,
       updatedAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
-      emoji: "🦁",
+      icon: "🦁",
     };
     const res = await fetch("/api/articles", {
       method: "post",
@@ -148,8 +139,6 @@ const Articles = () => {
             level: newArticles[index].level + 1,
             parentId: Number(parentId),
           });
-          console.log(newArticles[index].children);
-
           dispatch(setArticles([...newArticles]));
         }
       }
@@ -157,26 +146,37 @@ const Articles = () => {
       dispatch(setActiveArticle(requestBody));
     }
   };
-  useEffect(() => {
-    getArticle();
-  }, []);
+
+  const setACtiveArticleMethod = async () => {
+    const activeArticle = articles.find((item) => item.id === Number(id));
+    if (activeArticle) {
+      dispatch(setActiveArticle(activeArticle));
+    }
+  };
 
   const { id } = useParams();
   useEffect(() => {
-    if (location.pathname.indexOf('work') > -1) {
+    if (location.pathname.indexOf("work") > -1) {
+      if (articles.every((item) => item.id !== Number(id))) {
+        run();
+      }
       if (id) {
-        const activeArticle = articles.find((item) => item.id === Number(id));
-        if (activeArticle) {
-          dispatch(setActiveArticle(activeArticle));
-        }
+        setACtiveArticleMethod();
       } else {
-        // navigate(`/worker/${articles[0].id}`);
         dispatch(setActiveArticle(articles[0]));
       }
     } else {
-      dispatch(setActiveArticle({}))
+      dispatch(setActiveArticle({}));
     }
-  }, [location, articles])
+  }, [location]);
+
+  useEffect(() => {
+    setACtiveArticleMethod();
+  }, [articles]);
+
+  useEffect(() => {
+    run();
+  }, []);
 
   const onNodeClick = (data: any) => {
     dispatch(setActiveArticle(data));
@@ -231,22 +231,13 @@ const Articles = () => {
           </Popover>
         </div>
         <CollapsibleContent>
-          {loading ? (
-            <div className="loading flex flex-col gap-2">
-              <Skeleton className="h-4 w-full bg-gray-200 dark:bg-[#333]" />
-              <Skeleton className="h-4 w-full bg-gray-200 dark:bg-[#333]" />
-              <Skeleton className="h-4 w-full bg-gray-200 dark:bg-[#333]" />
-              <Skeleton className="h-4 w-full bg-gray-200 dark:bg-[#333]" />
-            </div>
-          ) : (
-            <Tree
-              treeData={articles}
-              onNodeClick={(data) => onNodeClick(data)}
-              value={activeArticle.id}
-              actionSlot={(data) => Action(data, createArticle)}
-              expandAll={false}
-            ></Tree>
-          )}
+          <Tree
+            treeData={articles}
+            onNodeClick={(data) => onNodeClick(data)}
+            value={activeArticle.id}
+            actionSlot={(data) => Action(data, createArticle)}
+            expandAll={false}
+          ></Tree>
         </CollapsibleContent>
       </Collapsible>
       <Button

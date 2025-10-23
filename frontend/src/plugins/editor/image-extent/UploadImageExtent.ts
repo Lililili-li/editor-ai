@@ -1,21 +1,20 @@
-import { mergeAttributes, Node, nodeInputRule } from '@tiptap/core'
+import { mergeAttributes, nodeInputRule } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
-import UploadImage from '@/plugins/editor/upload-image/UploadImage'
-import Image from '@tiptap/extension-image'
+import UploadImage from '@/plugins/editor/image-extent/ImageBlock'
+import { Image } from '@tiptap/extension-image'
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
-    uploadImage: {
-      insertUploadImage: () => ReturnType
+    imageBlock: {
+      insertImage: () => ReturnType
     }
   }
 }
 
 export const inputRegex = /(?:^|\s)(!\[(.+|:?)]\((\S+)(?:(?:\s+)["'](\S+)["'])?\))$/
 
-const UploadImageExtents =  Image.extend({
-  name: 'uploadImage',
-
+export const ImageBlock = Image.extend({
+  name: 'imageBlock',
   addOptions() {
     return {
       allowBase64: false,
@@ -73,19 +72,36 @@ const UploadImageExtents =  Image.extend({
   parseHTML() {
     return [
       {
-        tag: 'upload-image',
+        tag: 'img',
+        getAttrs: (node: HTMLElement) => {
+          return {
+            src: node.getAttribute('src'),
+            name: node.getAttribute('name') || '',
+            width: node.getAttribute('width') || 0,
+            height: node.getAttribute('height') || 0,
+            ratio: node.getAttribute('ratio') || '75',
+            align: node.getAttribute('align') || 'start',
+            rotate: node.getAttribute('rotate') || 0,
+            originWidth: node.getAttribute('originWidth') || 0,
+            originHeight: node.getAttribute('originHeight') || 0,
+            originRatio: node.getAttribute('originRatio') || '75',
+            description: node.getAttribute('description') || '',
+            descriptionVisible: node.getAttribute('descriptionVisible') || false
+          }
+        }
       },
     ]
   },
 
-  renderHTML({ HTMLAttributes }) {
-    return ['upload-image', mergeAttributes(HTMLAttributes, this.options.HTMLAttributes)]
+  renderHTML({ HTMLAttributes }: { HTMLAttributes: any}) {
+    return ['img', mergeAttributes(HTMLAttributes, this.options.HTMLAttributes)]
   },
+
   addCommands() {
     return {
-      insertUploadImage: () => ({ state, dispatch, commands }) => {
+      insertImage: () => ({ state, dispatch, commands }: { state: any, dispatch: any, commands: any }) => {
         if (dispatch) {
-          const node = state.schema.nodes.uploadImage.create()
+          const node = state.schema.nodes.imageBlock.create()
           const { from } = state.selection
           commands.insertContentAt(from, node)
         }
@@ -112,5 +128,3 @@ const UploadImageExtents =  Image.extend({
     ]
   },
 })
-
-export default UploadImageExtents

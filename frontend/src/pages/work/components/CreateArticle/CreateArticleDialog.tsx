@@ -5,7 +5,13 @@ import {
 } from "@/components/ui/input-group";
 import { Search } from "lucide-react";
 import { Popover, Modal } from "@douyinfe/semi-ui";
-import { useImperativeHandle, useRef, useState, type Ref } from "react";
+import {
+  createContext,
+  useImperativeHandle,
+  useRef,
+  useState,
+  type Ref,
+} from "react";
 import { XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -15,6 +21,11 @@ import Recommend from "./Recommend";
 import MyTemplates from "./MyTemplates";
 import General from "./General";
 import TestImage from "./test.png";
+import { useRequest } from "ahooks";
+import articleService from "@/api/article-service";
+import ServiceLoading from "@/components/ui/service-loading";
+import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 export interface DialogActions {
   openDialog: () => void;
@@ -94,7 +105,14 @@ const templatesData: TemplateProps[] = [
     isRecommend: false,
   },
 ];
+
+export const CreateArticleContext = createContext({
+  createArticle: () => {},
+});
+
 const CreateArticleDialog = ({ ref }: { ref: Ref<DialogActions> }) => {
+  const navigate = useNavigate()
+
   const [visible, setVisible] = useState(false);
   const openDialog = () => {
     setVisible(true);
@@ -112,6 +130,28 @@ const CreateArticleDialog = ({ ref }: { ref: Ref<DialogActions> }) => {
 
   const changeTemplates = (id: string) => {
     setActiveTab(id);
+  };
+
+  const { loading, run } = useRequest(
+    (params) => articleService.createArticle(params),
+    {
+      manual: true,
+      onSuccess: (res) => {
+        toast.success('创建成功')
+        setVisible(false)
+        navigate('/work/'+ res.id)
+      },
+    }
+  );
+
+  const createArticle = async () => {
+    const requestBody = {
+      title: "",
+      icon: "\uD83D\uDE03",
+      content: "",
+      contentJson: "",
+    };
+    run(requestBody);
   };
 
   return (
@@ -137,9 +177,7 @@ const CreateArticleDialog = ({ ref }: { ref: Ref<DialogActions> }) => {
                     >
                       <span
                         className={`${
-                          index === 0
-                            ? "bg-[var(--R100)] text-[var(--R500)]"
-                            : ""
+                          index === 0 ? "bg-(--R100) text-(--R500)" : ""
                         } px-1 rounded-[2px] text-[12px]`}
                       >
                         {index + 1}
@@ -189,52 +227,58 @@ const CreateArticleDialog = ({ ref }: { ref: Ref<DialogActions> }) => {
       width={1200}
       bodyStyle={{ borderRadius: "8px" }}
     >
-      <div className="rounded-[8px] p-0 h-[80dvh] flex ">
-        <ScrollArea className="h-[100%] w-[200px] py-3 px-2 dark:bg-[#27272a]">
-          <Button
-            variant={activeTab === "myTemplates" ? "secondary" : "ghost"}
-            className="h-[32px] w-full justify-start rounded-[4px]"
-            onClick={() => changeTemplates("myTemplates")}
-          >
-            我的模板
-          </Button>
-          <Separator className="mt-2" />
-          <div className="flex flex-col gap-1 mt-2">
+      { loading && <ServiceLoading className=" absolute"/>}
+      <CreateArticleContext.Provider value={{ createArticle }}>
+        <div className={`rounded-[8px] p-0 h-[80dvh] flex pointer-none:`}>
+        
+          <ScrollArea className="h-full w-[200px] py-3 px-2 dark:bg-[#27272a]">
             <Button
-              variant={activeTab === "recommend" ? "secondary" : "ghost"}
+              variant={activeTab === "myTemplates" ? "secondary" : "ghost"}
               className="h-[32px] w-full justify-start rounded-[4px]"
-              onClick={() => changeTemplates("recommend")}
+              onClick={() => changeTemplates("myTemplates")}
             >
-              推荐
+              我的模板
             </Button>
-            {mockData.data.category.map((item) => (
+            <Separator className="mt-2" />
+            <div className="flex flex-col gap-1 mt-2">
               <Button
-                variant={activeTab === item.category_id ? "secondary" : "ghost"}
+                variant={activeTab === "recommend" ? "secondary" : "ghost"}
                 className="h-[32px] w-full justify-start rounded-[4px]"
-                onClick={() => changeTemplates(item.category_id)}
-                key={item.category_id}
+                onClick={() => changeTemplates("recommend")}
               >
-                {item.name}
+                推荐
               </Button>
-            ))}
-          </div>
-        </ScrollArea>
-        <Separator orientation="vertical" className="h-full" />
-        <ScrollArea className="h-[100%] flex-1  dark:bg-[#121212] bg-[#f8f9fa]">
-          <div className="py-[24px] pl-[24px]">
-            {activeTab === "recommend" ? (
-              <Recommend
-                templates={templatesData}
-                categories={mockData.data.category}
-              />
-            ) : activeTab != "recommend" && activeTab != "myTemplates" ? (
-              <General />
-            ) : (
-              <MyTemplates />
-            )}
-          </div>
-        </ScrollArea>
-      </div>
+              {mockData.data.category.map((item) => (
+                <Button
+                  variant={
+                    activeTab === item.category_id ? "secondary" : "ghost"
+                  }
+                  className="h-[32px] w-full justify-start rounded-[4px]"
+                  onClick={() => changeTemplates(item.category_id)}
+                  key={item.category_id}
+                >
+                  {item.name}
+                </Button>
+              ))}
+            </div>
+          </ScrollArea>
+          <Separator orientation="vertical" className="h-full" />
+          <ScrollArea className="h-full flex-1  dark:bg-[#121212] bg-[#f8f9fa]">
+            <div className="py-[24px] pl-[24px]">
+              {activeTab === "recommend" ? (
+                <Recommend
+                  templates={templatesData}
+                  categories={mockData.data.category}
+                />
+              ) : activeTab != "recommend" && activeTab != "myTemplates" ? (
+                <General />
+              ) : (
+                <MyTemplates />
+              )}
+            </div>
+          </ScrollArea>
+        </div>
+      </CreateArticleContext.Provider>
     </Modal>
   );
 };

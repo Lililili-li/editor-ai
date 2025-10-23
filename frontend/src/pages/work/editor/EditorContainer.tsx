@@ -9,17 +9,23 @@ import { setWordsCount } from "@/store/features/articleSlice.ts";
 import Mention from "@tiptap/extension-mention";
 import SuggestionExtent from "@/plugins/editor/suggestions/SuggestionExtent";
 import { TableKit } from "@tiptap/extension-table";
-import { Suspense, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { Suspense, useContext, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import EditorTool from "./EditorTool";
-import { ChatBubble, DragMenu, TableBubbleMenu } from "../../../plugins/editor/bubble-menu";
+import {
+  ChatBubble,
+  DragMenu,
+  TableBubbleMenu,
+} from "../../../plugins/editor/bubble-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import { TaskList, TaskItem } from "@tiptap/extension-list";
-import UploadImageExtent from "@/plugins/editor/upload-image/UploadImageExtent";
+import { ImageBlock } from "@/plugins/editor/image-extent/UploadImageExtent";
 import TextAlign from "@tiptap/extension-text-align";
 import Loading from "@/components/ui/Loading";
+import type { RootState } from "@/store";
+import { WorkContext } from "../Work";
 
 // const EditorContent = lazy(() => import('@tiptap/react'))
 
@@ -63,24 +69,24 @@ const extensions = [
   TaskItem.configure({
     nested: true,
   }),
-  UploadImageExtent,
+  ImageBlock.configure({
+    allowBase64: true,
+  }),
   TextAlign.configure({
     types: ["heading", "paragraph"],
   }),
 ];
 
 const EditorContainer = () => {
+  const { debounceUpdate } = useContext(WorkContext)
+
+  const { activeArticle } = useSelector((state: RootState) => state.article);
   const dispatch = useDispatch();
   const editor = useEditor({
     extensions,
-    content: `
-<h2>Hi there,</h2><p>this is a <em>basic</em> example of <strong>Tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:</p><ul><li><p>That’s a bullet list with one …</p></li><li><p>… or two list items.</p></li></ul><p>Isn’t that great? And all of that is editable. But wait, there’s more. Let’s try a code block:</p><pre><code class="language-css">body {
-  display: none;
-}</code></pre><p>I know, I know, this is impressive. It’s only the tip of the iceberg though. Give it a try and click a little bit around. Don’t forget to check the other examples too.</p><blockquote><p>Wow, that’s amazing. Good work, boy! 👏 <br>— Mom</p></blockquote><p></p>
-`,
+    content: '',
     onUpdate: (props) => {
-      console.log(props);
-      
+      debounceUpdate(activeArticle.id.toString(), {...activeArticle, content: props.editor.getHTML(), contentJson: props.editor.getJSON() })
     },
   });
   const { wordsCount } = useEditorState({
@@ -92,10 +98,15 @@ const EditorContainer = () => {
   useEffect(() => {
     dispatch(setWordsCount(wordsCount));
   }, [wordsCount]);
+  useEffect(() => {
+    if (activeArticle.id) {
+      editor.commands.setContent(activeArticle.content)
+    }
+  }, [activeArticle]);
 
   return (
     <div className="edit-container">
-      <div className="border-b-gray-200 border-b-[1px]">
+      <div className="border-b-gray-200 border-b">
         <EditorTool editor={editor} />
       </div>
       <ScrollArea style={{ height: "calc(100dvh - 110px)" }}>
@@ -110,7 +121,6 @@ const EditorContainer = () => {
               className="border-0 outline-0 h-full w-full"
             />
           </Suspense>
-
           <DragMenu editor={editor} />
         </div>
       </ScrollArea>

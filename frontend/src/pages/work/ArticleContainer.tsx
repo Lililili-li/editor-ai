@@ -21,7 +21,6 @@ const ArticleContainer = () => {
     <div className="h-full">
       <ResizablePanelGroup direction="horizontal">
         <ResizablePanel defaultSize={80} minSize={75} maxSize={85}>
-         
           <EditorContainer />
         </ResizablePanel>
         <ResizableHandle />

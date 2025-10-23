@@ -1,4 +1,4 @@
-import React, { type FC } from "react";
+import { type FC } from "react";
 import type { TemplateProps } from "./CreateArticleDialog";
 import Card from "./Card";
 
@@ -12,7 +12,7 @@ interface RecommendProps {
   }[];
 }
 
-const Recommend: FC<RecommendProps> = ({ templates, categories }) => {
+const Recommend: FC<RecommendProps> = ({ templates }) => {
   return (
     <div className="flex flex-col">
       <div>
@@ -21,8 +21,9 @@ const Recommend: FC<RecommendProps> = ({ templates, categories }) => {
           <Card isCreate={true} />
           {templates
             .filter((item) => item.isRecommend)
-            .map((item) => (
+            .map((item, index) => (
               <Card
+                key={index}
                 type={item.type}
                 title={item.title}
                 thumbnail={item.thumbnail}

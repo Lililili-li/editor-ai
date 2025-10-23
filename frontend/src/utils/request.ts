@@ -129,7 +129,6 @@ request.interceptors.response.use(
 
     // 处理网络错误/超时等
     let errorMessage = '网络错误，请稍后重试';
-    console.log(error);
     
     toast.error("操作失败", {
       description: error.response.data.message,

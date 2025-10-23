@@ -64,9 +64,30 @@ export default (props: ReactNodeViewProps<HTMLLabelElement>) => {
     });
   }, [props.node.attrs]);
 
-  const getImageDimensions = useCallback((file: File) => {
+  useEffect(() => {
+    getImageDimensions(undefined, src).then(res => {
+      const originRatio = Number(Number(res.width / res.height).toFixed(2));
+        // 更新节点属性
+        props.updateAttributes({
+          src,
+          name,
+          width: res.width * (ratio / 100),
+          height: res.height * (ratio / 100),
+          originRatio,
+          originWidth: res.width,
+          originHeight: res.height,
+        });
+    })
+  },[])
+
+  const getImageDimensions = useCallback((file?: File, src?: string) => {
     return new Promise<{ width: number; height: number }>((resolve, reject) => {
-      const objectUrl = URL.createObjectURL(file);
+      let objectUrl = ''
+      if (file) {
+        objectUrl = URL.createObjectURL(file);
+      }else {
+        objectUrl = src!
+      }
       const img = new window.Image();
       img.onload = () => {
         const width = img.naturalWidth;
@@ -107,7 +128,7 @@ export default (props: ReactNodeViewProps<HTMLLabelElement>) => {
               setUploadProgress(progress);
             },
           }),
-          getImageDimensions(file),
+          getImageDimensions(file, src),
         ]);
         const originRatio = Number(Number(dims.width / dims.height).toFixed(2));
         // 更新节点属性
@@ -195,6 +216,7 @@ export default (props: ReactNodeViewProps<HTMLLabelElement>) => {
         break;
     }
   };
+  
 
   // 如果已经有图片，显示图片预览
   if (src) {

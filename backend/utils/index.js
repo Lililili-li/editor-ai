@@ -44,7 +44,63 @@ function verifyPassword(password, salt, storedHash, iterations = 10000) {
   return hash === storedHash;
 }
 
+/**
+ * 扁平数据转树结构
+ * @param {Array} flatData - 扁平数据数组
+ * @param {Object} [options] - 配置项
+ * @param {string} [options.idKey='id'] - 节点唯一标识字段名
+ * @param {string} [options.parentIdKey='parentId'] - 父节点标识字段名
+ * @param {string} [options.childrenKey='children'] - 子节点数组字段名
+ * @param {string|number} [options.rootParentValue=null] - 根节点的 parentId 值（默认 null）
+ * @returns {Array} 转换后的树结构数组
+ */
+function flatToTree(flatData, options = {}) {
+  // 默认配置
+  const {
+    idKey = 'id',
+    parentIdKey = 'parentId',
+    childrenKey = 'children',
+    rootParentValue = null
+  } = options;
+
+  // 校验输入数据
+  if (!Array.isArray(flatData)) {
+    throw new Error('输入必须是数组');
+  }
+
+  // 1. 构建节点映射表（id -> 节点），方便快速查找父节点
+  const nodeMap = new Map();
+  flatData.forEach(node => {
+    // 给每个节点初始化子节点数组（避免后续判断 undefined）
+    node[childrenKey] = node[childrenKey] || [];
+    nodeMap.set(node[idKey], node);
+  });
+
+  // 2. 遍历所有节点，将子节点挂载到对应的父节点下
+  const tree = [];
+  flatData.forEach(node => {
+    const parentId = node[parentIdKey];
+    // 查找父节点
+    const parentNode = nodeMap.get(parentId);
+
+    if (parentNode) {
+      // 有父节点：挂载到父节点的子节点数组中
+      parentNode[childrenKey].push(node);
+    } else {
+      // 无父节点（或父节点为根节点值）：作为根节点加入树
+      if (parentId === rootParentValue) {
+        tree.push(node);
+      }
+    }
+  });
+
+  return tree;
+}
+
 module.exports = {
   hashPassword,
-  verifyPassword
+  verifyPassword,
+  flatToTree
 }
+
+

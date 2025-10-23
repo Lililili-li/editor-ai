@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <section className="home-container w-dvw h-dvh">
       <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel defaultSize={18} minSize={15} maxSize={30}>
+        <ResizablePanel defaultSize={18} minSize={15} maxSize={30} className="min-w-[250px]">
           <Sidebar />
         </ResizablePanel>
         <ResizableHandle withHandle />

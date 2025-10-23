@@ -20,7 +20,7 @@ import type { ToolBarCompProps } from ".";
 
 const PluginsList: FC<ToolBarCompProps> = ({ editorState, editor }) => {
   const onInsertImage = () => {
-    editor.chain().focus().insertUploadImage().run();
+    editor.chain().focus().insertImage().run();
   };
 
   return (

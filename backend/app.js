@@ -7,6 +7,7 @@ const { testConnection } = require('./utils/db');
 const { authenticateToken } = require('./middleware/auth');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/user');
+const articleRouter = require('./routes/article')
 const { result } = require('./utils/results');
 const cors = require('cors')
 
@@ -25,6 +26,7 @@ testConnection();
 
 app.use('/api/', indexRouter);
 app.use('/api/user', authenticateToken, usersRouter);
+app.use('/api/article', authenticateToken, articleRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
