@@ -3,7 +3,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { emojiList } from "@/lib/emoji";
+import { emojiList } from "@/shared/emoji";
 import { useDispatch, useSelector } from "react-redux";
 import { type RootState } from "@/store";
 import { updateActiveArticle } from "@/store/features/articleSlice.ts";

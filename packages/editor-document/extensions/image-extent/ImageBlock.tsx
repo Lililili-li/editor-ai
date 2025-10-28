@@ -3,7 +3,7 @@ import type { ReactNodeViewProps } from "@tiptap/react";
 import { NodeViewWrapper } from "@tiptap/react";
 import { Image, PlusIcon, Upload, AlertCircle, RotateCcw } from "lucide-react";
 import { useState, useRef, useCallback, useEffect, useId } from "react";
-import { uploadImage, validateFile } from "@/utils/upload";
+import { uploadImage, validateFile } from "@/shared/upload";
 import { toast } from "sonner";
 import {
   Popover,

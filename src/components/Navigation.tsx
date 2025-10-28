@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom"
-import { cn } from "@/utils"
+import { cn } from "@/shared"
 import { ModeToggle } from "./mode-toggle"
 
 const navigation = [

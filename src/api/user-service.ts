@@ -1,4 +1,4 @@
-import http from "@/utils/request";
+import http from "@/shared/request";
 
 const getUserInfo = async (id: string) => http.get<any>('/user/'+id)
 

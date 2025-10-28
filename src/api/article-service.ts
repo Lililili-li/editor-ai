@@ -1,4 +1,4 @@
-import http from "@/utils/request"
+import http from "@/shared/request"
 
 const createArticle = (params: any) => http.post<any>('/article', params)
 

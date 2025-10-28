@@ -20,7 +20,7 @@ import {
   Plus,
   Trash2,
 } from "lucide-react";
-import { treeDataToFlatData } from "@/utils";
+import { treeDataToFlatData } from "@/shared";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveArticle, setArticles } from "@/store/features/articleSlice";

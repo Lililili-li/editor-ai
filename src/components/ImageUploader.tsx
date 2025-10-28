@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Upload, Image as ImageIcon, X, AlertCircle } from 'lucide-react';
-import { uploadImage, uploadMultipleImages, validateFile } from '@/utils/upload';
+import { uploadImage, uploadMultipleImages, validateFile } from '@/shared/upload';
 import { toast } from 'sonner';
 
 interface ImageUploaderProps {
