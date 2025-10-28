@@ -7,16 +7,19 @@ import {
 } from "@/components/ui/resizable";
 
 import type { RootState } from "@/store";
-import EditorContainer from "./editor/EditorContainer";
+// import EditorContainer from "./editor/EditorContainer";
+import EditorContainer from '@editor-document/view/EditorContainer'
+import { useContext } from "react";
+import { WorkContext } from "./Work";
 
 const ArticleContainer = () => {
   const state = useSelector((state: RootState) => state.editor);
-
+  const { debounceUpdate } = useContext(WorkContext);
   return (
     <div className="h-full">
       <ResizablePanelGroup direction="horizontal">
         <ResizablePanel defaultSize={80} minSize={75} maxSize={85}>
-          <EditorContainer />
+          <EditorContainer debounceUpdate={debounceUpdate}/>
         </ResizablePanel>
         <ResizableHandle />
         <ResizablePanel

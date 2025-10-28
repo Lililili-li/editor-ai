@@ -5,7 +5,7 @@ type LoginParamsProps = {
   password: string
 }
 
-const login = (params: LoginParamsProps) => http.post<any>('/login', params)
+const login = (params: LoginParamsProps) => http.post<any>('/auth/login', params)
 
 export default {
   login

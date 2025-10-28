@@ -149,7 +149,7 @@ const CreateArticleDialog = ({ ref }: { ref: Ref<DialogActions> }) => {
       title: "",
       icon: "\uD83D\uDE03",
       content: "",
-      contentJson: "",
+      content_json: "",
     };
     run(requestBody);
   };

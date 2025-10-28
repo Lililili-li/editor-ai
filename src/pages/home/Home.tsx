@@ -65,6 +65,7 @@ const Home = () => {
             <TabsTrigger value="edit">编辑过</TabsTrigger>
             <TabsTrigger value="check">浏览过</TabsTrigger>
             <TabsTrigger value="like">我点赞的</TabsTrigger>
+            <TabsTrigger value="shared">与我共享</TabsTrigger>
           </TabsList>
           <TabsContent value="edit">
             <DataTable documents={documents} />
@@ -73,6 +74,9 @@ const Home = () => {
             <DataTable documents={documents} />
           </TabsContent>
           <TabsContent value="like">
+            <DataTable documents={documents} />
+          </TabsContent>
+          <TabsContent value="shared">
             <DataTable documents={documents} />
           </TabsContent>
         </Tabs>

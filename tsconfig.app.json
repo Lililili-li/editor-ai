@@ -28,10 +28,23 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@src/*": [
+        "src/*"
+      ],
+      "@editor-document/*": [
+        "packages/editor-document/*"
+      ],
+      "@editor-datasheet/*": [
+        "packages/editor-datasheet/*"
+      ],
+      "@editor-spreadsheet/*": [
+        "packages/editor-spreadsheet/*"
       ]
     }
   },
   "include": [
-    "src"
-, "mock"  ]
+    "src",
+    "packages"
+  ]
 }

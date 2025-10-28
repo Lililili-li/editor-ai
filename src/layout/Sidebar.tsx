@@ -3,7 +3,6 @@ import { Separator } from "@/components/ui/separator";
 import {
   BookOpenText,
   Search,
-  HeartPlus,
   SquareArrowOutUpRight,
   Rose,
   Star,

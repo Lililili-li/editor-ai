@@ -61,13 +61,13 @@ const UserInfo = () => {
   });
   return (
     <div className="flex items-center gap-2">
-      <Button variant="ghost" className="p-0">
+      <Button variant="ghost" className="p-0 px-2 h-9">
         <Bell style={{ width: "18px" }} />
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" className="p-0">
+            <Button variant="ghost" className="p-0 px-2 h-9">
               <Avatar className="w-[28px] h-[28px]">
                 <AvatarImage src="https://avatars.githubusercontent.com/u/88611687?v=4" />
                 <AvatarFallback>A</AvatarFallback>

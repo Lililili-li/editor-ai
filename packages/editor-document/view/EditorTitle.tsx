@@ -9,14 +9,11 @@ import { type RootState } from "@/store";
 import { updateActiveArticle } from "@/store/features/articleSlice.ts";
 import { Input } from "@/components/ui/input";
 import { useParams } from "react-router";
-import { useContext } from "react";
-import { WorkContext } from "../Work";
 
-const EditorTitle = () => {
+const EditorTitle = ({ debounceUpdate }: { debounceUpdate: (id: string, article: any) => void }) => {
   const { activeArticle } = useSelector((state: RootState) => state.article);
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { debounceUpdate } = useContext(WorkContext)
   return (
     <div className="title mb-6 flex gap-2">
       <div className="emoji flex items-center">

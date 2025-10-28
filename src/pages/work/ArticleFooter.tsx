@@ -9,8 +9,8 @@ const EditorFooter = () => {
   return (
     <div className="flex justify-between items-center h-full">
       <div className="update-time flex gap-2 text-sm text-gray-500 dark:text-gray-300">
-        <span>创建时间: { activeArticle.createdAt? dayjs(activeArticle.createdAt).format('YYYY-MM-DD HH:mm:ss'): '-' }</span>
-        <span>更新时间: { activeArticle.updatedAt? dayjs(activeArticle.updatedAt).format('YYYY-MM-DD HH:mm:ss'): '-' }</span>
+        <span>创建时间: { activeArticle.created_at? dayjs(activeArticle.created_at).format('YYYY-MM-DD HH:mm:ss'): '-' }</span>
+        <span>更新时间: { activeArticle.updated_at? dayjs(activeArticle.updated_at).format('YYYY-MM-DD HH:mm:ss'): '-' }</span>
       </div>
       <div className="content text-sm text-gray-500 dark:text-gray-300">
         AI 的回答未必正确无误，<span className="text-rose-500">请注意核查</span>

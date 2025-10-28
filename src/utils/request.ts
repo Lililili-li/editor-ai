@@ -159,8 +159,8 @@ const http = {
     return request.post(url, data, config);
   },
 
-  put<T = any>(url: string, data?: any, config?: RequestConfig): Promise<T> {
-    return request.put(url, data, config);
+  patch<T = any>(url: string, data?: any, config?: RequestConfig): Promise<T> {
+    return request.patch(url, data, config);
   },
 
   delete<T = any>(url: string, config?: RequestConfig): Promise<T> {

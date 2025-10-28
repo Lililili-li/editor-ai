@@ -48,7 +48,7 @@ const Login = () => {
   } = useRequest(() => sharedService.login(form.getValues()), {
     manual: true,
     onSuccess: (result) => {
-      localStorage.setItem("accessToken", result.token);
+      localStorage.setItem("accessToken", result.access_token);
       localStorage.setItem('userInfo', JSON.stringify(result))
       dispatch(setUserInfo(result))
       navigate("/home");
