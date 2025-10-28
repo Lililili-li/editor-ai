@@ -2,12 +2,12 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@components/popover";
 import { emojiList } from "@/shared/emoji";
 import { useDispatch, useSelector } from "react-redux";
 import { type RootState } from "@/store";
 import { updateActiveArticle } from "@/store/features/articleSlice.ts";
-import { Input } from "@/components/ui/input";
+import { Input } from "@components/input";
 import { useParams } from "react-router";
 
 const EditorTitle = ({ debounceUpdate }: { debounceUpdate: (id: string, article: any) => void }) => {

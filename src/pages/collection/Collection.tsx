@@ -4,7 +4,7 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group";
+} from "@components/input-group";
 
 const Collection = () => {
   const [searchInputVisible, setSearchInputVisible] = useState(false);

@@ -3,8 +3,8 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
+} from "@components/tooltip";
+import { Button } from "@components/button";
 import { Undo2 } from "lucide-react";
 import type { ToolBarCompProps } from ".";
 

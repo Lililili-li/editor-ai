@@ -2,15 +2,15 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+} from "@components/collapsible";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@components/popover";
 import { useEffect, useState } from "react";
-import Tree from "@/components/ui/Tree";
-import { Button } from "@/components/ui/button";
+import Tree from "@components/Tree";
+import { Button } from "@components/button";
 import {
   ArrowDownWideNarrow,
   ChevronDown,

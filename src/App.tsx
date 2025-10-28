@@ -1,6 +1,6 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import { router } from "./router";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@components/sonner";
 import { RouterProvider } from "react-router";
 import { Suspense } from "react";
 

@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui/button";
-import ColorPicker from "@/components/ui/ColorPicker";
+import { Button } from "@components/button";
+import ColorPicker from "@components/ColorPicker";
 import { useState } from "react";
 import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
-} from "@/components/ui/tooltip";
+} from "@components/tooltip";
 
 import { Editor } from "@tiptap/react";
 import type { EditorState } from "../EditorTool";

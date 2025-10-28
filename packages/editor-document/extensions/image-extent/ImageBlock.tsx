@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@components/button";
 import type { ReactNodeViewProps } from "@tiptap/react";
 import { NodeViewWrapper } from "@tiptap/react";
 import { Image, PlusIcon, Upload, AlertCircle, RotateCcw } from "lucide-react";
@@ -9,12 +9,12 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@components/popover";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@components/tooltip";
 import ImageStyle from "./ImageStyle";
 import AlginImage from "./AlginImage";
 import Description from "./Description";

@@ -2,8 +2,8 @@ import { BubbleMenu } from "@tiptap/react/menus";
 import type { FC } from "react";
 import type { BubbleMenuProps } from ".";
 import { findParentNode, posToDOMRect } from "@tiptap/core";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "@components/button";
+import { Separator } from "@components/separator";
 
 const TableBubbleMenu: FC<BubbleMenuProps> = ({ editor }) => {
   const onAction = (type: string) => {

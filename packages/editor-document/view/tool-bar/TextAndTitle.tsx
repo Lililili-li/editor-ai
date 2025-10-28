@@ -4,13 +4,13 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+} from "@components/dropdown-menu";
+import { Button } from "@components/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@components/tooltip";
 import { type EditorState } from "@/pages/worker/editor/EditorTool";
 import { useEffect, useState } from "react";
 import type { Editor } from "@tiptap/react";

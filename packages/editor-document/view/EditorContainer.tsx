@@ -14,12 +14,12 @@ import { useDevice } from "@src/composable/use-device";
 import { useParams } from "react-router";
 import { useRequest } from "ahooks";
 import articleService from "@src/api/article-service";
-import LoadingSpinner from "@src/components/ui/LoadingSpinner";
+import LoadingSpinner from "@components/LoadingSpinner";
 import {
   setActiveArticle,
   setWordsCount,
 } from "@src/store/features/articleSlice.ts";
-import { ScrollArea } from "@src/components/ui/scroll-area";
+import { ScrollArea } from "@components/scroll-area";
 
 import { extensions } from "@editor-document/extensions";
 

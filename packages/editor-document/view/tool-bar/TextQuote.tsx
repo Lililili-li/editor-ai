@@ -2,12 +2,12 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
+} from "@components/tooltip";
+import { Button } from "@components/button";
 import { Quote } from "lucide-react";
 import type { FC } from "react";
 import type { ToolBarCompProps } from ".";
-import { Toggle } from "@/components/ui/toggle";
+import { Toggle } from "@components/toggle";
 
 const TextQuote: FC<ToolBarCompProps> = ({ editorState, editor }) => {
   return (

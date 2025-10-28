@@ -2,17 +2,17 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@components/tooltip";
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
+} from "@components/popover";
+import { Button } from "@components/button";
 import { TextAlignCenter, TextAlignEnd, TextAlignStart } from "lucide-react";
 import { useEffect, useState, type FC } from "react";
 import type { ToolBarCompProps } from ".";
-import { Toggle } from "@/components/ui/toggle";
+import { Toggle } from "@components/toggle";
 
 const Alignment: FC<ToolBarCompProps> = ({ editorState, editor }) => {
   const [alginTypes, setAlginTypes] = useState([

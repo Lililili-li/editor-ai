@@ -1,11 +1,11 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Toggle } from "@/components/ui/toggle";
+import { Avatar, AvatarFallback, AvatarImage } from "@components/avatar";
+import { Toggle } from "@components/toggle";
 import { Bot, HeartPlus, Share, SquareArrowOutUpRight } from "lucide-react";
 import { assistantVisibleToggled } from "@/store/features/editorSlice.ts";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/store";
 import { memo } from "react";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "@components/spinner";
 
 const EditorHeader = memo(({ loading }: { loading: boolean }) => {
   const dispatch = useDispatch();

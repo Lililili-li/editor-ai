@@ -2,15 +2,15 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from "@components/tooltip";
+import { Tabs, TabsList, TabsTrigger } from "@components/tabs";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+} from "@components/popover";
+import { Input } from "@components/input";
+import { Button } from "@components/button";
 import { Ruler } from "lucide-react";
 import { useEffect, useState, type FC } from "react";
 

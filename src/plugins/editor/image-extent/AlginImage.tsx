@@ -3,8 +3,8 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
+} from "@components/tooltip";
+import { Button } from "@components/button";
 import { AlignCenter, AlignLeft, AlignRight } from "lucide-react";
 
 import {
@@ -15,7 +15,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@components/dropdown-menu";
 
 interface AlginImageProps {
   updateAttributes: (attributes: Record<string, any>) => void;

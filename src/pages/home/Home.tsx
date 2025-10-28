@@ -1,7 +1,7 @@
 import documentIcon from "./images/create-document.svg";
 import AiICon from "./images/Ai.svg";
 import templateIcon from "./images/template.svg";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/tabs";
 import DataTable from "./components/DataTable";
 import CreateArticleDialog from "../work/components/CreateArticle/CreateArticleDialog";
 import { useRef } from "react";

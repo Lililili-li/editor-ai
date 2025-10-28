@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@components/button";
 import { BubbleMenu } from "@tiptap/react/menus";
 import type { FC } from "react";
 import type { BubbleMenuProps } from ".";
@@ -7,7 +7,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@components/tooltip";
 
 const ChatBubble: FC<BubbleMenuProps> = ({ editor }) => {
   const onCreateComment = () => {

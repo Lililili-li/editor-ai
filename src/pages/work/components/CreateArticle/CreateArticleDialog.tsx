@@ -2,7 +2,7 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group";
+} from "@components/input-group";
 import { Search } from "lucide-react";
 import { Popover, Modal } from "@douyinfe/semi-ui";
 import {
@@ -13,9 +13,9 @@ import {
   type Ref,
 } from "react";
 import { XIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@components/button";
+import { Separator } from "@components/separator";
+import { ScrollArea } from "@components/scroll-area";
 import mockData from "./mock.json";
 import Recommend from "./Recommend";
 import MyTemplates from "./MyTemplates";
@@ -23,7 +23,7 @@ import General from "./General";
 import TestImage from "./test.png";
 import { useRequest } from "ahooks";
 import articleService from "@/api/article-service";
-import ServiceLoading from "@/components/ui/service-loading";
+import ServiceLoading from "@components/service-loading";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 

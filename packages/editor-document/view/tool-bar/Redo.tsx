@@ -5,8 +5,8 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
+} from "@components/tooltip";
+import { Button } from "@components/button";
 import { Redo2 } from "lucide-react";
 
 interface RedoProps {

@@ -17,6 +17,7 @@ export default defineConfig(({ command }) => {
         "@editor-document": path.resolve(__dirname, "./packages/editor-document"),
         "@editor-datasheet": path.resolve(__dirname, "./packages/editor-datasheet"),
         "@editor-spreadsheet": path.resolve(__dirname, "./packages/editor-spreadsheet"),
+        "@components": path.resolve(__dirname, "./packages/components"),
       },
     },
   }

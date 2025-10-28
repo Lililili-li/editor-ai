@@ -1,6 +1,6 @@
 import { lazy } from "react";
 import { createBrowserRouter, redirect } from "react-router";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import LoadingSpinner from "@components/LoadingSpinner";
 import Layout from "@/layout/Layout";
 
 const Demo = lazy(() => import("@/pages/Demo"));

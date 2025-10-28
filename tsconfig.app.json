@@ -40,7 +40,10 @@
       ],
       "@editor-spreadsheet/*": [
         "packages/editor-spreadsheet/*"
-      ]
+      ],
+      "@components/*": [
+        "packages/components/*"
+      ],
     }
   },
   "include": [

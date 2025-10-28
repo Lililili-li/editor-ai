@@ -1,5 +1,5 @@
 import { Button } from "../components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@components/separator";
 import {
   BookOpenText,
   Search,
@@ -10,7 +10,7 @@ import {
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
 import { useNavigate, useLocation } from "react-router";
-import { Kbd, KbdGroup } from "@/components/ui/kbd";
+import { Kbd, KbdGroup } from "@components/kbd";
 import { useDevice } from "@/composable/use-device";
 import { HotKeys } from "@douyinfe/semi-ui";
 import SearchCommand from "@/pages/home/components/SearchCommand";

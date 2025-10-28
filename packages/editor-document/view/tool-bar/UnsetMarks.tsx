@@ -4,8 +4,8 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
+} from "@components/tooltip";
+import { Button } from "@components/button";
 import { BrushCleaning } from "lucide-react";
 
 const UnsetMarks: FC<ToolBarCompProps> = ({ editorState, editor }) => {

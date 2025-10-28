@@ -4,8 +4,8 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+} from "@components/dropdown-menu";
+import { Button } from "@components/button";
 import type { EditorState } from "../EditorTool";
 import type { Editor } from "@tiptap/react";
 import { useEffect, useState } from "react";

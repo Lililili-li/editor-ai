@@ -8,20 +8,20 @@ import {
   Superscript,
   Underline,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Toggle } from "@/components/ui/toggle";
+import { Button } from "@components/button";
+import { Toggle } from "@components/toggle";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@components/tooltip";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@components/dropdown-menu";
 import type { EditorState } from "../EditorTool";
 import type { Editor } from "@tiptap/react";
 import { useEffect, useState } from "react";

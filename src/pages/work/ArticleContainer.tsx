@@ -4,7 +4,7 @@ import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@/components/ui/resizable";
+} from "@components/resizable";
 
 import type { RootState } from "@/store";
 // import EditorContainer from "./editor/EditorContainer";

@@ -1,12 +1,12 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@components/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@components/tooltip";
 import { PencilRuler } from "lucide-react";
 import type { FC } from "react";
-import { Toggle } from "@/components/ui/toggle";
+import { Toggle } from "@components/toggle";
 
 interface DescriptionProps {
   updateAttributes: (attributes: Record<string, any>) => void;

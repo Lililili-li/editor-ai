@@ -1,11 +1,11 @@
 import { List, ListOrdered, ListTodo } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Toggle } from "@/components/ui/toggle";
+import { Button } from "@components/button";
+import { Toggle } from "@components/toggle";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@components/tooltip";
 import type { FC } from "react";
 import type { ToolBarCompProps } from ".";
 

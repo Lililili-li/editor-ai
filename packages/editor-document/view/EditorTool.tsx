@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@components/separator";
 import { useEditorState, type Editor } from "@tiptap/react";
 import {
   TextAndTitle,

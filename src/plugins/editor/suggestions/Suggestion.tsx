@@ -5,8 +5,8 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/components/ui/command";
-import { ScrollArea } from "@/components/ui/scroll-area";
+} from "@components/command";
+import { ScrollArea } from "@components/scroll-area";
 import {
   Code,
   Heading1,

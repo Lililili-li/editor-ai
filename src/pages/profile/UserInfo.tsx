@@ -1,7 +1,7 @@
 import type { RootState } from "@/store";
 import { useDispatch, useSelector } from "react-redux";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@components/avatar";
+import { Button } from "@components/button";
 import { Bell, Check } from "lucide-react";
 import { logout, setUserInfo } from "@/store/features/userSlice";
 import userService from "@/api/user-service";
@@ -19,7 +19,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@components/dropdown-menu";
 import { LanguageEnum, setLanguage, setTheme, ThemeEnum } from "@/store/features/appSlice";
 import { useTheme, type Theme } from "@/components/theme-provider";
 

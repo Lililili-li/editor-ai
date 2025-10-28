@@ -2,7 +2,7 @@ import type { BubbleMenuProps } from "@tiptap/react/menus";
 import { useRef, type FC } from "react";
 import DragHandle from "@tiptap/extension-drag-handle-react";
 import { Copy, GripVertical, Plus, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@components/button";
 import { Dropdown } from "@douyinfe/semi-ui";
 import type { Editor } from "@tiptap/core";
 import { Node } from "@tiptap/pm/model";

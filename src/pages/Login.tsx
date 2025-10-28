@@ -1,7 +1,7 @@
 import { ModeToggle } from "@/components/mode-toggle";
-import { Button } from "@/components/ui/button";
+import { Button } from "@components/button";
 import { Github } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@components/separator";
 import {
   Form,
   FormControl,
@@ -10,15 +10,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@components/form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
+import { Input } from "@components/input";
 import sharedService from "@/api/shared-service";
 import { useRequest } from "ahooks";
 import { useEffect } from "react";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "@components/spinner";
 import { useLocation, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "@/store/features/userSlice";

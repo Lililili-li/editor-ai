@@ -2,7 +2,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@components/popover";
 import { useState } from "react";
 import { Button } from "./button";
 import { Check, ChevronRight } from "lucide-react";

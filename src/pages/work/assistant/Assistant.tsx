@@ -1,7 +1,7 @@
 import { assistantVisibleToggled } from '@/store/features/editorSlice.ts'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from "@/store";
-import { Button } from '@/components/ui/button';
+import { Button } from '@components/button';
 import { X } from 'lucide-react';
 
 

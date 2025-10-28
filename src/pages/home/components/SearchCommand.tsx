@@ -6,7 +6,7 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/components/ui/command";
+} from "@components/command";
 import { useImperativeHandle, useState, type FC, type ForwardedRef } from "react";
 const SearchCommand:FC<{ ref: ForwardedRef<{ openModal: () => void }> }> = ({ref}) => {
   const [visible, setVisible] = useState(false)
