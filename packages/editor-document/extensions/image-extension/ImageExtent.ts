@@ -1,6 +1,6 @@
 import { mergeAttributes, nodeInputRule } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
-import UploadImage from '@/plugins/editor/image-extent/ImageBlock'
+import UploadImage from './ImageBlock'
 import { Image } from '@tiptap/extension-image'
 
 declare module '@tiptap/core' {
@@ -74,14 +74,14 @@ export const ImageBlock = Image.extend({
       {
         tag: 'img',
         getAttrs: (node: HTMLElement) => {
+          console.log(node);
           return {
             src: node.getAttribute('src'),
             name: node.getAttribute('name') || '',
             width: node.getAttribute('width') || 0,
             height: node.getAttribute('height') || 0,
             ratio: node.getAttribute('ratio') || '75',
-            align: node.getAttribute('align') || 'start',
-            rotate: node.getAttribute('rotate') || 0,
+            align: node.getAttribute('align') || 'center',
             originWidth: node.getAttribute('originWidth') || 0,
             originHeight: node.getAttribute('originHeight') || 0,
             originRatio: node.getAttribute('originRatio') || '75',

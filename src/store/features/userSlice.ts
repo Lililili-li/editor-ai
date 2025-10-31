@@ -6,6 +6,7 @@ const userSlice = createSlice({
     userInfo: {
       username: '',
       id: '',
+      avatar: '',
     }
   },
   reducers: {

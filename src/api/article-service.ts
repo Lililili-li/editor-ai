@@ -8,9 +8,12 @@ const deleteArticle = (id: string) => http.delete<any>(`/article/${id}`)
 
 const updateArticle = (params: any, id: string) => http.patch<any>(`/article/${id}`, params)
 
+const getTemplates = () => http.get<any>('/template')
+
 export default {
   createArticle,
   getArticles,
   deleteArticle,
-  updateArticle
+  updateArticle,
+  getTemplates
 }

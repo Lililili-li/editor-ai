@@ -3,8 +3,12 @@ import AiICon from "./images/Ai.svg";
 import templateIcon from "./images/template.svg";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/tabs";
 import DataTable from "./components/DataTable";
-import CreateArticleDialog from "../work/components/CreateArticle/CreateArticleDialog";
-import { useRef } from "react";
+// import CreateArticleDialog from "../work/components/create-article/CreateArticleDialog";
+// import TemplateDialog from "../work/components/template-dialog/TemplateDialog";
+import { lazy, useRef } from "react";
+
+const TemplateDialog = lazy(() => import("../work/components/template-dialog/TemplateDialog"))
+
 const documents = [
   {
     type: "业务经营周报",
@@ -13,8 +17,11 @@ const documents = [
     id: 1,
   },
 ];
+
 const Home = () => {
-  const createArticleDialogRef = useRef<{ openDialog: () => void }>(null);
+  const TemplateDialogRef = useRef<{
+    openDialog: (type: "template" | "create") => void;
+  }>(null);
 
   return (
     <section className="home-container h-dvh p-5">
@@ -23,7 +30,7 @@ const Home = () => {
         <button
           className="py-3 px-4 flex items-center w-[340px] hover:bg-gray-100 rounded-[8px] gap-2 cursor-pointer border-[1px] border-[rgb(222, 224, 227)
 ] border-solid transition-all duration-300 ease-in-out flex-wrap dark:border-gray-500 dark:hover:bg-white/10"
-          onClick={() => createArticleDialogRef.current?.openDialog()}
+          onClick={() => TemplateDialogRef.current?.openDialog("create")}
         >
           <img src={documentIcon} alt="" style={{ width: "24px" }} />
           <div className="flex flex-col">
@@ -36,6 +43,7 @@ const Home = () => {
         <button
           className="py-3 px-4 flex items-center w-[340px] hover:bg-gray-100 rounded-[8px] gap-2 cursor-pointer border-[1px] border-[rgb(222, 224, 227)
 ] border-solid transition-all duration-300 ease-in-out flex-wrap dark:border-gray-500 dark:hover:bg-white/10"
+          onClick={() => TemplateDialogRef.current?.openDialog("template")}
         >
           <img src={templateIcon} alt="" style={{ width: "24px" }} />
           <div className="flex flex-col">
@@ -81,7 +89,7 @@ const Home = () => {
           </TabsContent>
         </Tabs>
       </div>
-      <CreateArticleDialog ref={createArticleDialogRef} />
+      <TemplateDialog ref={TemplateDialogRef} />
     </section>
   );
 };

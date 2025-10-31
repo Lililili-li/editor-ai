@@ -17,8 +17,9 @@ const ChatBubble: FC<BubbleMenuProps> = ({ editor }) => {
     <BubbleMenu
       editor={editor}
       options={{ placement: "top", offset: 8, flip: true }}
+      shouldShow={() => editor.isActive('paragraph') && !editor.state.selection.empty}
     >
-      <div className="bg-white border border-[#eee] p-1 rounded-md flex items-center">
+      <div className="bg-white border border-[#eee] p-1 rounded-md flex items-center dark:bg-[#222] dark:border-[#444]">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -26,7 +27,7 @@ const ChatBubble: FC<BubbleMenuProps> = ({ editor }) => {
               variant="ghost"
               className="px-1 py-2 h-5"
             >
-              <Bot style={{ width: "18px", color: 'rgb(56, 128, 227)' }} />
+              <Bot style={{ width: "18px" }} />
             </Button>
           </TooltipTrigger>
           <TooltipContent>

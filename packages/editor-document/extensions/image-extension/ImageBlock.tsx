@@ -1,23 +1,10 @@
 import { Button } from "@components/button";
 import type { ReactNodeViewProps } from "@tiptap/react";
 import { NodeViewWrapper } from "@tiptap/react";
-import { Image, PlusIcon, Upload, AlertCircle, RotateCcw } from "lucide-react";
-import { useState, useRef, useCallback, useEffect, useId } from "react";
+import { Image, PlusIcon, Upload, AlertCircle } from "lucide-react";
+import { useState, useRef, useCallback } from "react";
 import { uploadImage, validateFile } from "@/shared/upload";
 import { toast } from "sonner";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@components/popover";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@components/tooltip";
-import ImageStyle from "./ImageStyle";
-import AlginImage from "./AlginImage";
-import Description from "./Description";
 import ImageResize from "./ImageResize";
 
 export default (props: ReactNodeViewProps<HTMLLabelElement>) => {
@@ -35,71 +22,34 @@ export default (props: ReactNodeViewProps<HTMLLabelElement>) => {
     width,
     height,
     originRatio,
-    rotate,
     originHeight,
     originWidth,
     description,
     descriptionVisible,
   } = props.node.attrs;
   const { editor } = props;
-  const [state, setState] = useState({
-    width: 0,
-    height: 0,
-    ratio: "75%",
-    align: "start",
-    rotate: 0,
-    originRatio: 0,
-  });
-
-  useEffect(() => {
-    const { ratio, align, width, height, originRatio, rotate } =
-      props.node.attrs;
-    setState({
-      ratio,
-      align,
-      width,
-      height,
-      originRatio,
-      rotate,
-    });
-  }, [props.node.attrs]);
-
-  useEffect(() => {
-    getImageDimensions(undefined, src).then(res => {
-      const originRatio = Number(Number(res.width / res.height).toFixed(2));
-        // 更新节点属性
-        props.updateAttributes({
-          src,
-          name,
-          width: res.width * (ratio / 100),
-          height: res.height * (ratio / 100),
-          originRatio,
-          originWidth: res.width,
-          originHeight: res.height,
-        });
-    })
-  },[])
 
   const getImageDimensions = useCallback((file?: File, src?: string) => {
     return new Promise<{ width: number; height: number }>((resolve, reject) => {
-      let objectUrl = ''
+      let objectUrl = "";
       if (file) {
         objectUrl = URL.createObjectURL(file);
-      }else {
-        objectUrl = src!
+      } else {
+        objectUrl = src!;
       }
       const img = new window.Image();
+      img.src = objectUrl;
       img.onload = () => {
         const width = img.naturalWidth;
         const height = img.naturalHeight;
         URL.revokeObjectURL(objectUrl);
         resolve({ width, height });
       };
-      img.onerror = () => {
+      img.onerror = (error) => {
+        console.log(error, "error");
         URL.revokeObjectURL(objectUrl);
         reject(new Error("图片读取失败"));
       };
-      img.src = objectUrl;
     });
   }, []);
 
@@ -120,7 +70,6 @@ export default (props: ReactNodeViewProps<HTMLLabelElement>) => {
       setIsUploading(true);
       setError(null);
       setUploadProgress(0);
-
       try {
         const [result, dims] = await Promise.all([
           uploadImage(file, {
@@ -130,16 +79,19 @@ export default (props: ReactNodeViewProps<HTMLLabelElement>) => {
           }),
           getImageDimensions(file, src),
         ]);
-        const originRatio = Number(Number(dims.width / dims.height).toFixed(2));
+        const ratio = Number(
+          Number((dims.width / dims.height) * 100).toFixed(2)
+        );
         // 更新节点属性
         props.updateAttributes({
-          src: result.url,
-          name: result.name,
-          width: dims.width * (ratio / 100),
-          height: dims.height * (ratio / 100),
-          originRatio,
+          src: `${import.meta.env.VITE_FILE_SERVER_URL}/${result.path}`,
+          name: result.filename,
+          width: dims.width,
+          height: dims.height,
+          ratio,
           originWidth: dims.width,
           originHeight: dims.height,
+          align: "center",
         });
 
         toast.success("图片上传成功");
@@ -197,85 +149,27 @@ export default (props: ReactNodeViewProps<HTMLLabelElement>) => {
     [handleFileUpload]
   );
 
-  const onSetImageAlgin = (type: string) => {
-    switch (type) {
-      case "start":
-        props.updateAttributes({
-          align: "start",
-        });
-        break;
-      case "center":
-        props.updateAttributes({
-          align: "center",
-        });
-        break;
-      default:
-        props.updateAttributes({
-          align: "end",
-        });
-        break;
-    }
-  };
-  
-
   // 如果已经有图片，显示图片预览
   if (src) {
     return (
       <NodeViewWrapper className="upload-image">
-        <Popover>
-          <PopoverTrigger asChild>
-            <div className="w-full">
-              <ImageResize
-                descriptionVisible={descriptionVisible}
-                align={align}
-                src={src}
-                name={name}
-                width={width}
-                height={height}
-                editor={editor}
-                updateAttributes={props.updateAttributes}
-                description={description}
-                originRatio={originRatio}
-              />
-            </div>
-          </PopoverTrigger>
-          <PopoverContent side="top" className="px-2 py-1 w-fit">
-            <div className="flex gap-1 justify-between items-center">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="p-0 px-1 h-6"
-                    onClick={() => onSetImageAlgin("start")}
-                  >
-                    <RotateCcw style={{ width: "16px" }} />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>逆时针旋转90度</p>
-                </TooltipContent>
-              </Tooltip>
-              <ImageStyle
-                updateAttributes={props.updateAttributes}
-                width={width}
-                height={height}
-                originRatio={originRatio}
-                ratio={ratio}
-                originHeight={originHeight}
-                originWidth={originWidth}
-              />
-              <AlginImage
-                updateAttributes={props.updateAttributes}
-                align={align}
-              />
-              <Description
-                updateAttributes={props.updateAttributes}
-                description={description}
-                descriptionVisible={descriptionVisible}
-              />
-            </div>
-          </PopoverContent>
-        </Popover>
+        <div className="w-full">
+          <ImageResize
+            descriptionVisible={descriptionVisible}
+            align={align}
+            src={src}
+            name={name}
+            width={width}
+            height={height}
+            editor={editor}
+            updateAttributes={props.updateAttributes}
+            description={description}
+            ratio={ratio}
+            originRatio={originRatio}
+            originHeight={originHeight}
+            originWidth={originWidth}
+          />
+        </div>
       </NodeViewWrapper>
     );
   }

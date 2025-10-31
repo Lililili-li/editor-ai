@@ -1,4 +1,4 @@
-import { Button } from "../components/ui/button";
+import { Button } from "@components/button";
 import { Separator } from "@components/separator";
 import {
   BookOpenText,
@@ -14,7 +14,7 @@ import { Kbd, KbdGroup } from "@components/kbd";
 import { useDevice } from "@/composable/use-device";
 import { HotKeys } from "@douyinfe/semi-ui";
 import SearchCommand from "@/pages/home/components/SearchCommand";
-import UserInfo from "@/pages/profile/UserInfo";
+import UserInfo from "@/pages/profile/components/UserInfo";
 import Articles from "@/pages/work/Articles";
 
 interface MenuProps {

@@ -31,9 +31,6 @@ const Work = () => {
   );
   const debounceUpdate = useCallback(debounce(updateArticle, 1000 * 1), [])
 
-  useEffect(() => {
-    console.log('更新了');
-  })
   return (
     <div className="h-full w-full flex flex-col">
       <WorkContext.Provider value={{debounceUpdate: (id, params) => debounceUpdate(id, params)}}>

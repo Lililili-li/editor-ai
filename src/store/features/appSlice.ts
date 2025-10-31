@@ -14,8 +14,8 @@ const appSlice = createSlice({
   name: 'app',
   initialState: {
     appConfig: {
-      language: LanguageEnum.chinese,
-      theme: ThemeEnum.light,
+      language: 'chinese',
+      theme: 'light',
     }
   },
   reducers: {

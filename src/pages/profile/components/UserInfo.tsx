@@ -20,38 +20,48 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@components/dropdown-menu";
-import { LanguageEnum, setLanguage, setTheme, ThemeEnum } from "@/store/features/appSlice";
+import {
+  LanguageEnum,
+  setLanguage,
+  setTheme,
+  ThemeEnum,
+} from "@/store/features/appSlice";
 import { useTheme, type Theme } from "@/components/theme-provider";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router";
 
 const themeMap = [
   {
     label: ThemeEnum.light,
-    value: 'light',
+    value: "light",
   },
   {
     label: ThemeEnum.dark,
-    value: 'dark',
+    value: "dark",
   },
   {
     label: ThemeEnum.system,
-    value: 'system',
+    value: "system",
   },
 ];
 
 const languageMap = [
   {
     label: LanguageEnum.chinese,
-    value: 'chinese',
+    value: "chinese",
   },
   {
     label: LanguageEnum.english,
-    value: 'english',
+    value: "english",
   },
 ];
 const UserInfo = () => {
+  const navigate = useNavigate()
+
   const { theme, setTheme: setProviderTheme } = useTheme();
   const { userInfo } = useSelector((state: RootState) => state.user);
   const { appConfig } = useSelector((state: RootState) => state.app);
+
   const dispatch = useDispatch();
   const localUserInfo = JSON.parse(localStorage.getItem("userInfo")!);
   useRequest(() => userService.getUserInfo((localUserInfo as any)?.id), {
@@ -59,6 +69,10 @@ const UserInfo = () => {
       dispatch(setUserInfo(res));
     },
   });
+
+  useEffect(() => {
+    dispatch(setTheme(theme));
+  }, []);
   return (
     <div className="flex items-center gap-2">
       <Button variant="ghost" className="p-0 px-2 h-9">
@@ -69,7 +83,7 @@ const UserInfo = () => {
           <div className="flex items-center gap-2">
             <Button variant="ghost" className="p-0 px-2 h-9">
               <Avatar className="w-[28px] h-[28px]">
-                <AvatarImage src="https://avatars.githubusercontent.com/u/88611687?v=4" />
+                <AvatarImage src={`${import.meta.env.VITE_FILE_SERVER_URL}/${userInfo?.avatar || ""}`} />
                 <AvatarFallback>A</AvatarFallback>
               </Avatar>
             </Button>
@@ -79,7 +93,7 @@ const UserInfo = () => {
           <DropdownMenuLabel>
             <div className="flex items-center gap-2">
               <Avatar className="w-[28px] h-[28px]">
-                <AvatarImage src="https://avatars.githubusercontent.com/u/88611687?v=4" />
+                <AvatarImage src={`${import.meta.env.VITE_FILE_SERVER_URL}/${userInfo?.avatar || ""}`} />
                 <AvatarFallback>A</AvatarFallback>
               </Avatar>
               <span className="text-sm overflow-ellipsis overflow-hidden whitespace-nowrap font-bold">
@@ -92,18 +106,29 @@ const UserInfo = () => {
               <DropdownMenuSubTrigger className="flex justify-between">
                 <div className="flex-1 flex justify-between items-center pr-1">
                   <span>外观</span>
-                  <span className="text-[13px] text-[#444] dark:text-[#eee]">跟随系统</span>
+                  <span className="text-[13px] text-[#444] dark:text-[#eee]">
+                    {
+                      themeMap.find((item) => item.value === appConfig.theme)
+                        ?.label
+                    }
+                  </span>
                 </div>
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
                   {themeMap.map((item) => (
-                    <DropdownMenuItem key={item.value} className="flex justify-between items-center" onClick={() => {
-                      setProviderTheme(item.value as Theme)
-                      dispatch(setTheme(item.value))
-                    }}>
+                    <DropdownMenuItem
+                      key={item.value}
+                      className="flex justify-between items-center"
+                      onClick={() => {
+                        setProviderTheme(item.value as Theme);
+                        dispatch(setTheme(item.value));
+                      }}
+                    >
                       <span>{item.label}</span>
-                      {item.value === appConfig.theme && <Check style={{ width: '15px' }}/>}
+                      {item.value === appConfig.theme && (
+                        <Check style={{ width: "15px" }} />
+                      )}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuSubContent>
@@ -115,15 +140,27 @@ const UserInfo = () => {
               <DropdownMenuSubTrigger className="flex justify-between">
                 <div className="flex-1 flex justify-between items-center pr-1">
                   <span>语言</span>
-                  <span className="text-[13px] text-[#444] dark:text-[#eee]">简体中文</span>
+                  <span className="text-[13px] text-[#444] dark:text-[#eee]">
+                    {
+                      languageMap.find(
+                        (item) => item.value === appConfig.language
+                      )?.label
+                    }
+                  </span>
                 </div>
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
                   {languageMap.map((item) => (
-                    <DropdownMenuItem key={item.value} className="flex justify-between items-center" onClick={() => dispatch(setLanguage(item.value))}>
+                    <DropdownMenuItem
+                      key={item.value}
+                      className="flex justify-between items-center"
+                      onClick={() => dispatch(setLanguage(item.value))}
+                    >
                       <span>{item.label}</span>
-                      {item.value === appConfig.language && <Check style={{ width: '15px' }}/>}
+                      {item.value === appConfig.language && (
+                        <Check style={{ width: "15px" }} />
+                      )}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuSubContent>
@@ -131,7 +168,9 @@ const UserInfo = () => {
             </DropdownMenuSub>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>账户设置</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => navigate('/home/profile')}>
+            账户设置
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => dispatch(logout())}>
             退出登陆

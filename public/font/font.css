@@ -1,8 +1,9 @@
 @font-face {
   font-family: 'kx'; /* 字体名称 */
-  src: url('./nzgrKangxi.ttf') format('tff'), /* 字体文件路径和格式 */;
+  src: url('./nzgrKangxi.ttf') format('truetype'); /* 字体文件路径和格式 */
   /* 可以添加多个不同格式的字体文件以提供更好的兼容性 */
   /* 其他字体样式描述，例如 font-weight 和 font-style */
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }

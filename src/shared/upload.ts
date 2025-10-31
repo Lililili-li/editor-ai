@@ -2,9 +2,11 @@
  * 图片上传工具函数
  */
 
+import http from "./request";
+
 export interface UploadOptions {
   /** 上传的服务器地址 */
-  url?: string;
+  path?: string;
   /** 最大文件大小（字节） */
   maxSize?: number;
   /** 允许的文件类型 */
@@ -18,8 +20,8 @@ export interface UploadOptions {
 }
 
 export interface UploadResult {
-  url: string;
-  name: string;
+  path: string;
+  filename: string;
   size: number;
 }
 
@@ -27,7 +29,7 @@ export interface UploadResult {
  * 验证文件类型和大小
  */
 export function validateFile(file: File, options: UploadOptions = {}): { valid: boolean; error?: string } {
-  const { maxSize = 5 * 1024 * 1024, allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'] } = options;
+  const { maxSize = 10 * 1024 * 1024, allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'] } = options;
 
   // 检查文件类型
   if (!allowedTypes.includes(file.type)) {
@@ -75,40 +77,18 @@ export function uploadToServer(
   options: UploadOptions = {}
 ): Promise<UploadResult> {
   const { onProgress } = options;
-  // const { url = '/api/upload' } = options; // 在实际项目中会使用这个 URL
-
-  return new Promise((resolve, reject) => {
-    // 模拟上传进度
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += Math.random() * 30;
-      if (progress >= 100) {
-        progress = 100;
-        clearInterval(interval);
-        
-        // 模拟上传成功
-        setTimeout(() => {
-          const result: UploadResult = {
-            url: URL.createObjectURL(file), // 使用本地 URL 作为示例
-            name: file.name,
-            size: file.size
-          };
-          resolve(result);
-        }, 200);
-      }
-      
+  const formData = new FormData();
+  formData.append('file', file);
+  return http.post<UploadResult>('/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },  
+    onUploadProgress: (progressEvent) => {
+      const progress = Math.round((progressEvent.loaded * 100) / (progressEvent?.total || 1));
       if (onProgress) {
-        onProgress(Math.round(progress));
+        onProgress(progress);
       }
-    }, 100);
-
-    // 模拟网络错误（5% 的概率）
-    if (Math.random() < 0.05) {
-      setTimeout(() => {
-        clearInterval(interval);
-        reject(new Error('网络错误，上传失败'));
-      }, 1000);
-    }
+    },
   });
 }
 
@@ -128,7 +108,6 @@ export async function uploadImage(
   try {
     // 上传文件
     const result = await uploadToServer(file, options);
-    
     if (options.onSuccess) {
       options.onSuccess(result);
     }

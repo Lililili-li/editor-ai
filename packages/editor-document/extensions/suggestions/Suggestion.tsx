@@ -23,7 +23,7 @@ import {
   Minus,
   Quote,
 } from "lucide-react";
-import { Button } from "@src/components/ui/button";
+import { Button } from "@components/button";
 import { useEffect, useImperativeHandle, useState } from "react";
 
 const formatIconMap = {

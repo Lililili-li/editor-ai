@@ -3,22 +3,27 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@components/collapsible";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@components/popover";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Tree from "@components/Tree";
 import { Button } from "@components/button";
 import {
-  ArrowDownWideNarrow,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@components/dropdown-menu";
+import {
   ChevronDown,
-  Copy,
+  CopyIcon,
   Ellipsis,
-  HeartPlus,
+  Link,
   Plus,
+  Share,
+  Star,
   Trash2,
+  StarOff
 } from "lucide-react";
 import { treeDataToFlatData } from "@/shared";
 import { useLocation, useNavigate, useParams } from "react-router";
@@ -27,6 +32,10 @@ import { setActiveArticle, setArticles } from "@/store/features/articleSlice";
 import type { RootState } from "@/store";
 import { useRequest } from "ahooks";
 import articleService from "@/api/article-service";
+import TemplateDialog from "./components/template-dialog/TemplateDialog";
+import StaticIcon from "@/components/icon/StaticIcon";
+import TransportIcon from "@/components/icon/TransportIcon";
+import StaticOffIcon from "@/components/icon/StaticOffIcon";
 
 const Action = (
   data: any,
@@ -34,54 +43,60 @@ const Action = (
 ) => {
   return (
     <div className="flex items-center gap-1.5">
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            variant="ghost"
-            className="p-0 h-5 w-5 hover:bg-black/4 rounded-4xl"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <Ellipsis />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-20 p-1">
-          <div className="flex flex-col gap-2">
-            <Button
-              variant="ghost"
-              className="p-0 text-sm w-full justify-start pl-2.5 rounded-4xl h-8"
-            >
-              <HeartPlus />
-              收藏
-            </Button>
-            <Button
-              variant="ghost"
-              className="p-0 text-sm w-full justify-start pl-2.5 rounded-4xl h-8"
-            >
-              <Copy />
-              复制
-            </Button>
-            <Button
-              variant="ghost"
-              className="p-0 text-sm w-full justify-start pl-2.5 rounded-4xl text-red-500 hover:text-red-500 h-8"
-            >
-              <Trash2 />
-              删除
-            </Button>
-          </div>
-        </PopoverContent>
-      </Popover>
       <Button
         variant="ghost"
-        className="p-0 h-5 w-5 rounded-4xl hover:bg-black/4"
+        className="p-0 h-5 w-5 hover:bg-black/4"
         onClick={(e) => {
           e.stopPropagation();
           createArticle(data.id);
         }}
       >
-        <Plus />
+        <Plus style={{ width: "15px" }} />
       </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className="p-0 h-5 w-5 hover:bg-black/4"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <Ellipsis style={{ width: "15px" }}/>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-40" align="start">
+          <DropdownMenuGroup>
+            <DropdownMenuItem>
+              <Share style={{ width: "15px" }} /> 分享
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link style={{ width: "15px" }} /> 复制链接
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuItem>
+              {/* <StarOff style={{ width: "15px" }} /> */}
+              <Star style={{ width: "15px" }} /> 收藏
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <CopyIcon style={{ width: "15px" }} /> 创建备份
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              {/* <StaticOffIcon style={{ width: "15px" }} />  */}
+              <StaticIcon style={{ width: "15px" }} /> 添加置顶
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <TransportIcon style={{ width: "15px" }} /> 转让权限
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <Trash2 style={{ width: "15px" }} /> 删除
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
@@ -96,7 +111,7 @@ const Articles = () => {
   );
   const dispatch = useDispatch();
 
-  const { run } = useRequest(() => articleService.getArticles(), {
+  const { run, loading } = useRequest(() => articleService.getArticles(), {
     manual: true,
     onSuccess: (res) => {
       const articles = treeDataToFlatData(res);
@@ -118,10 +133,19 @@ const Articles = () => {
 
   const onNodeClick = (data: any) => {
     dispatch(setActiveArticle(data));
-    if (location.pathname.indexOf("work") !== -1 && id !== data.id) {
+    if (location.pathname.indexOf("work") === -1) {
       navigate(`/work/${data.id}`);
+    } else {
+      if (id !== data.id) {
+        navigate(`/work/${data.id}`);
+      }
     }
   };
+
+  const TemplateDialogRef = useRef<{
+    openDialog: (type: "template" | "create", directoryId?: string) => void;
+  }>(null);
+
   return (
     <section>
       <Collapsible
@@ -143,55 +167,44 @@ const Articles = () => {
               <span className="text-gray-500 font-bold">我的文档</span>
             </div>
           </CollapsibleTrigger>
-          {/* <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="ghost" className="p-0 h-5 w-5">
-                <ArrowDownWideNarrow
-                  style={{ width: "16px", height: "16px" }}
-                />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-20 p-1 flex flex-col">
-              <Button variant="ghost" className="p-0">
-                默认排序
-              </Button>
-              <Button variant="ghost" className="p-0">
-                创建时间
-              </Button>
-              <Button variant="ghost" className="p-0">
-                更新时间
-              </Button>
-              <Button variant="ghost" className="p-0">
-                点赞数量
-              </Button>
-              <Button variant="ghost" className="p-0">
-                收藏数量
-              </Button>
-            </PopoverContent>
-          </Popover> */}
+          <Button
+            variant="ghost"
+            className="p-0 h-5 w-5 hover:bg-black/4"
+            onClick={(e) => {
+              e.stopPropagation();
+              TemplateDialogRef.current?.openDialog("create");
+            }}
+          >
+            <Plus />
+          </Button>
         </div>
         <CollapsibleContent>
           <Tree
             treeData={articles}
             onNodeClick={(data) => onNodeClick(data)}
             value={activeArticle.id}
-            actionSlot={(data) => Action(data, () => {})}
+            actionSlot={(data) =>
+              Action(data, (parentId) =>
+                TemplateDialogRef.current?.openDialog("create", parentId!)
+              )
+            }
             expandAll={false}
           ></Tree>
         </CollapsibleContent>
       </Collapsible>
-      {articles && articles.length === 0 && (
+      {articles && articles.length === 0 && !loading && (
         <Button
           variant="ghost"
           className="p-0 text-gray-500 dark:text-gray-400 dark:hover:text-gray-300 px-2 h-9 w-full justify-start"
           onClick={(e) => {
             e.stopPropagation();
-            () => {};
+            TemplateDialogRef.current?.openDialog("create");
           }}
         >
           <Plus /> 新建文档
         </Button>
       )}
+      <TemplateDialog ref={TemplateDialogRef} />
     </section>
   );
 };

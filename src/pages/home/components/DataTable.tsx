@@ -32,7 +32,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { memo, useState, type FC } from "react";
-import StaticIcon from "../../../components/icon/StaticIcon";
+import StaticIcon from "@/components/icon/StaticIcon";
 import documentIcon from "../images/document.svg";
 
 enum TypeEnum {

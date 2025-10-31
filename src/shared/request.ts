@@ -122,6 +122,12 @@ request.interceptors.response.use(
     return data.data;
   },
   (error) => {
+    const { data } = error.response;
+    const { code } = data;
+    if (code === 401) {
+      window.location.href = '/login';
+      localStorage.clear()
+    }
     // 移除已完成的请求（错误情况）
     if (error.config) {
       removeCompletedRequest(error.config as RequestConfig);

@@ -44,13 +44,14 @@ export interface EditorState {
   isTaskList: boolean;
   isCodeBlock: boolean;
   isBlockquote: boolean;
+  isLink: boolean;
   canUndo: boolean;
   canRedo: boolean;
   color: string;
   backgroundColor: string;
 }
 
-const EditorTool = ({ editor }: { editor: Editor }) => {
+const EditorTool = ({ editor }: { editor: Editor; }) => {
   const editorState = useEditorState({
     editor,
     selector: (ctx): EditorState => {
@@ -81,6 +82,7 @@ const EditorTool = ({ editor }: { editor: Editor }) => {
         isTaskList: ctx.editor.isActive("taskList") ?? false,
         isCodeBlock: ctx.editor.isActive("codeBlock") ?? false,
         isBlockquote: ctx.editor.isActive("blockquote") ?? false,
+        isLink: ctx.editor.isActive("link") ?? false,
         canUndo: ctx.editor.can().chain().undo().run() ?? false,
         canRedo: ctx.editor.can().chain().redo().run() ?? false,
         color: ctx.editor.getAttributes("textStyle").color,

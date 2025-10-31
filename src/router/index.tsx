@@ -71,6 +71,16 @@ export const routeConfig = [
         },
         HydrateFallback: LoadingSpinner,
       },
+      {
+        path: "profile",
+        lazy: async () => {
+          const comp = await import("@/pages/profile/Profile");
+          return {
+            Component: comp.default,
+          };
+        },
+        HydrateFallback: LoadingSpinner,
+      },
     ],
   },
   {
@@ -81,6 +91,22 @@ export const routeConfig = [
         index: true,
         lazy: async () => {
           const comp = await import("@/pages/work/Work");
+          return {
+            Component: comp.default,
+          };
+        },
+        HydrateFallback: LoadingSpinner,
+      }
+    ]
+  },
+   {
+    path: "/sheet",
+    Component: Layout,
+    children: [
+      {
+        index: true,
+        lazy: async () => {
+          const comp = await import("@/pages/sheet/Sheet");
           return {
             Component: comp.default,
           };
