@@ -12,39 +12,43 @@ jobs:
   # 任务名，可以自定义
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 部署到 gh-pages 需要写入权限
 
     steps:
       # 1. 拉取代码
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. 设置 Node 环境（根据你的项目需要选择版本）
+      # 2. 安装 pnpm（关键修复）
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9  # 或指定具体版本如 9.1.0，不指定会用 package.json 里的 packageManager 字段
+
+      # 3. 设置 Node 环境
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'pnpm'   # 自动缓存 pnpm 依赖，加速构建
+          cache: 'pnpm'   # pnpm 缓存
           cache-dependency-path: pnpm-lock.yaml
 
-      - name: Enable Corepack
-        run: corepack enable
-
-      # 3. 安装依赖
+      # 4. 安装依赖
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 6. 构建生产资源
+      # 5. 构建生产资源
       - name: Build
         run: pnpm run build
         env:
-          CI: true   # 有些库在 CI 环境下行为不同，设为 true 可得到更严格的警告
+          CI: true
 
-      # 7. 部署到 GitHub Pages（示例）
+      # 6. 部署到 GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
-        # 只有 main 分支且不是 PR 才执行部署（可选限制）
         if: github.ref == 'refs/heads/main'
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}  # 自动提供的 token
-          publish_dir: ./dist   # 构建后资源所在的目录（改你的输出目录）
-          publish_branch: gh-pages   # 部署到 gh-pages 分支
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
