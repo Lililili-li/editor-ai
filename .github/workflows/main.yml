@@ -1,0 +1,46 @@
+# .github/workflows/deploy.yml
+name: CI/CD Pipeline
+
+# 触发器：当 main 分支有 push 时运行
+on:
+  push:
+    branches: [main]
+  # 也可以手动触发（在 GitHub 界面点按钮运行）
+  workflow_dispatch:
+
+jobs:
+  # 任务名，可以自定义
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 拉取代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. 设置 Node 环境（根据你的项目需要选择版本）
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'   # 自动缓存 npm 依赖，加速构建
+
+      # 3. 安装依赖
+      - name: Install dependencies
+        run: npm ci   # ci 比 install 更快更严格，适合 CI 环境
+
+      # 6. 构建生产资源
+      - name: Build
+        run: npm run build
+        env:
+          CI: true   # 有些库在 CI 环境下行为不同，设为 true 可得到更严格的警告
+
+      # 7. 部署到 GitHub Pages（示例）
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        # 只有 main 分支且不是 PR 才执行部署（可选限制）
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # 自动提供的 token
+          publish_dir: ./dist   # 构建后资源所在的目录（改你的输出目录）
+          publish_branch: gh-pages   # 部署到 gh-pages 分支
