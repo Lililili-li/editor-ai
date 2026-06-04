@@ -7,6 +7,7 @@ import { viteMockServe } from 'vite-plugin-mock'
 // https://vite.dev/config/
 export default defineConfig(({ command }) => {
   return {
+    base: './',
     plugins: [
       react(),
       tailwindcss(),
