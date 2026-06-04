@@ -1,4 +1,4 @@
-import{a as o,j as e}from"./index-BGkdWJxx.js";import{E as m,r as g,u as x}from"./index-B_1JgU_L.js";const p=({id:t})=>e.jsxs("div",{children:["我是产品",t]}),f=({children:t,id:a})=>e.jsx(e.Fragment,{children:o.Children.map(t,n=>{if(o.isValidElement(n))return o.cloneElement(n,{id:a})})}),C=()=>{const[t,a]=o.useState(null),n=o.useRef(null);o.useEffect(()=>{const s=new m({element:n.current,content:`
+import{a as o,j as e}from"./index-JnBsgSNv.js";import{E as m,r as g,u as x}from"./index-B_1JgU_L.js";const p=({id:t})=>e.jsxs("div",{children:["我是产品",t]}),f=({children:t,id:a})=>e.jsx(e.Fragment,{children:o.Children.map(t,n=>{if(o.isValidElement(n))return o.cloneElement(n,{id:a})})}),C=()=>{const[t,a]=o.useState(null),n=o.useRef(null);o.useEffect(()=>{const s=new m({element:n.current,content:`
         <p>这是一个带表格功能的编辑器：</p>
         <table>
           <tr>
